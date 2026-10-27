@@ -12,7 +12,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: ashare-verified-collector-v4
+  group: dashboard-pages
   cancel-in-progress: false
 
 jobs:
@@ -33,27 +33,39 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Python dependencies
+      - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Backfill 80 sessions and calculate SMA20 SMA60 TRIN
+      - name: Update SMA20 SMA60 and TRIN
         run: python update_data.py
 
-      - name: Commit verified market data and backfill cache
+      - name: Collect real CSI300 history
+        continue-on-error: true
+        run: python collect_hs300.py
+
+      - name: Save market and index data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A data/
           if ! git diff --cached --quiet; then
-            git commit -m "Update real A-share breadth SMA20 SMA60"
+            git commit -m "Update A-share and CSI300 market data"
             git push
           fi
 
-      - name: Prepare static website
+      - name: Prepare website files
         run: |
           mkdir -p site/data
           cp index.html site/index.html
           cp data/market.json site/data/market.json
+
+          if [ -f data/hs300.json ]; then
+            cp data/hs300.json site/data/hs300.json
+          fi
+
+          if [ -f data/options_pcr.json ]; then
+            cp data/options_pcr.json site/data/options_pcr.json
+          fi
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
