@@ -16,7 +16,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: dashboard-site-deploy
+  group: dashboard-pages
   cancel-in-progress: false
 
 jobs:
@@ -36,6 +36,14 @@ jobs:
           mkdir -p site/data
           cp index.html site/index.html
           cp data/market.json site/data/market.json
+
+          if [ -f data/hs300.json ]; then
+            cp data/hs300.json site/data/hs300.json
+          fi
+
+          if [ -f data/options_pcr.json ]; then
+            cp data/options_pcr.json site/data/options_pcr.json
+          fi
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
