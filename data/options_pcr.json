@@ -1,0 +1,2866 @@
+{
+  "source": "SSE+SZSE ETF options only; CFFEX and commodity options not included",
+  "scope": "沪深ETF期权，不是全市场期权",
+  "scope_verified": false,
+  "asof": "2026-10-23",
+  "updated_at": "2026-10-27T04:08:25.454716+00:00",
+  "weight_method": "Sum put volume / sum call volume",
+  "history": [
+    {
+      "date": "2026-08-31",
+      "weighted_pcr": 0.7131,
+      "call_volume": 4163301,
+      "put_volume": 2968850,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 322536,
+          "put_volume": 246729,
+          "total_volume": 569265
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 351219,
+          "put_volume": 265241,
+          "total_volume": 616460
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 765154,
+          "put_volume": 662551,
+          "total_volume": 1427705
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1723079,
+          "put_volume": 915364,
+          "total_volume": 2638443
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 95615,
+          "put_volume": 111089,
+          "total_volume": 206704
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 22492,
+          "put_volume": 14886,
+          "total_volume": 37378
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 672441,
+          "put_volume": 657866,
+          "total_volume": 1330307
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 69782,
+          "put_volume": 27263,
+          "total_volume": 97045
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 140983,
+          "put_volume": 67861,
+          "total_volume": 208844
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-01",
+      "weighted_pcr": 0.833102,
+      "call_volume": 2960010,
+      "put_volume": 2465991,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 254431,
+          "put_volume": 200465,
+          "total_volume": 454896
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 239918,
+          "put_volume": 201364,
+          "total_volume": 441282
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 641083,
+          "put_volume": 568167,
+          "total_volume": 1209250
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 857793,
+          "put_volume": 709863,
+          "total_volume": 1567656
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 96170,
+          "put_volume": 89167,
+          "total_volume": 185337
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 29109,
+          "put_volume": 21831,
+          "total_volume": 50940
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 691287,
+          "put_volume": 591763,
+          "total_volume": 1283050
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 30699,
+          "put_volume": 21608,
+          "total_volume": 52307
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 119520,
+          "put_volume": 61763,
+          "total_volume": 181283
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-02",
+      "weighted_pcr": 0.993738,
+      "call_volume": 3278529,
+      "put_volume": 3257998,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 335528,
+          "put_volume": 291946,
+          "total_volume": 627474
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 348787,
+          "put_volume": 303060,
+          "total_volume": 651847
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 630890,
+          "put_volume": 673690,
+          "total_volume": 1304580
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 948785,
+          "put_volume": 979908,
+          "total_volume": 1928693
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 86990,
+          "put_volume": 100459,
+          "total_volume": 187449
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 27273,
+          "put_volume": 19460,
+          "total_volume": 46733
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 749104,
+          "put_volume": 789042,
+          "total_volume": 1538146
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 38744,
+          "put_volume": 26889,
+          "total_volume": 65633
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 112428,
+          "put_volume": 73544,
+          "total_volume": 185972
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-03",
+      "weighted_pcr": 0.891399,
+      "call_volume": 3159653,
+      "put_volume": 2816511,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 266066,
+          "put_volume": 254221,
+          "total_volume": 520287
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 329225,
+          "put_volume": 242548,
+          "total_volume": 571773
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 675186,
+          "put_volume": 668168,
+          "total_volume": 1343354
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 848191,
+          "put_volume": 818790,
+          "total_volume": 1666981
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 84466,
+          "put_volume": 94706,
+          "total_volume": 179172
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 28102,
+          "put_volume": 18165,
+          "total_volume": 46267
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 769969,
+          "put_volume": 639997,
+          "total_volume": 1409966
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 37480,
+          "put_volume": 25621,
+          "total_volume": 63101
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 120968,
+          "put_volume": 54295,
+          "total_volume": 175263
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-04",
+      "weighted_pcr": 0.803707,
+      "call_volume": 3658090,
+      "put_volume": 2940034,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 411205,
+          "put_volume": 301541,
+          "total_volume": 712746
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 410986,
+          "put_volume": 274570,
+          "total_volume": 685556
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 786259,
+          "put_volume": 686770,
+          "total_volume": 1473029
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 954007,
+          "put_volume": 831034,
+          "total_volume": 1785041
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 112664,
+          "put_volume": 111791,
+          "total_volume": 224455
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 34404,
+          "put_volume": 15971,
+          "total_volume": 50375
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 810649,
+          "put_volume": 643739,
+          "total_volume": 1454388
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 43419,
+          "put_volume": 23159,
+          "total_volume": 66578
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 94497,
+          "put_volume": 51459,
+          "total_volume": 145956
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-07",
+      "weighted_pcr": 0.800837,
+      "call_volume": 3563443,
+      "put_volume": 2853736,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 348302,
+          "put_volume": 281228,
+          "total_volume": 629530
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 292514,
+          "put_volume": 231909,
+          "total_volume": 524423
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 716233,
+          "put_volume": 625338,
+          "total_volume": 1341571
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 986455,
+          "put_volume": 802025,
+          "total_volume": 1788480
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 134864,
+          "put_volume": 103310,
+          "total_volume": 238174
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 33092,
+          "put_volume": 20755,
+          "total_volume": 53847
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 907042,
+          "put_volume": 718150,
+          "total_volume": 1625192
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 36236,
+          "put_volume": 15214,
+          "total_volume": 51450
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 108705,
+          "put_volume": 55807,
+          "total_volume": 164512
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-08",
+      "weighted_pcr": 0.542003,
+      "call_volume": 4799833,
+      "put_volume": 2601526,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 459731,
+          "put_volume": 192900,
+          "total_volume": 652631
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 329716,
+          "put_volume": 252829,
+          "total_volume": 582545
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 652566,
+          "put_volume": 545298,
+          "total_volume": 1197864
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 2090586,
+          "put_volume": 791958,
+          "total_volume": 2882544
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 147296,
+          "put_volume": 99690,
+          "total_volume": 246986
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 29372,
+          "put_volume": 19070,
+          "total_volume": 48442
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 940301,
+          "put_volume": 616633,
+          "total_volume": 1556934
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 33122,
+          "put_volume": 21723,
+          "total_volume": 54845
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 117143,
+          "put_volume": 61425,
+          "total_volume": 178568
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-09",
+      "weighted_pcr": 0.720225,
+      "call_volume": 3347896,
+      "put_volume": 2411238,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 218510,
+          "put_volume": 180520,
+          "total_volume": 399030
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 288327,
+          "put_volume": 257262,
+          "total_volume": 545589
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 480860,
+          "put_volume": 455612,
+          "total_volume": 936472
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1363543,
+          "put_volume": 822317,
+          "total_volume": 2185860
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 121346,
+          "put_volume": 75519,
+          "total_volume": 196865
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 33668,
+          "put_volume": 29442,
+          "total_volume": 63110
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 645475,
+          "put_volume": 525217,
+          "total_volume": 1170692
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 37815,
+          "put_volume": 18459,
+          "total_volume": 56274
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 158352,
+          "put_volume": 46890,
+          "total_volume": 205242
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-10",
+      "weighted_pcr": 0.700703,
+      "call_volume": 3298363,
+      "put_volume": 2311173,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 277031,
+          "put_volume": 186136,
+          "total_volume": 463167
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 331344,
+          "put_volume": 224756,
+          "total_volume": 556100
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 457748,
+          "put_volume": 513210,
+          "total_volume": 970958
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1306586,
+          "put_volume": 707270,
+          "total_volume": 2013856
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 167233,
+          "put_volume": 69121,
+          "total_volume": 236354
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 27171,
+          "put_volume": 29808,
+          "total_volume": 56979
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 602712,
+          "put_volume": 526730,
+          "total_volume": 1129442
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 34713,
+          "put_volume": 13150,
+          "total_volume": 47863
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 93825,
+          "put_volume": 40992,
+          "total_volume": 134817
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-11",
+      "weighted_pcr": 0.877541,
+      "call_volume": 5571354,
+      "put_volume": 4889091,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 627130,
+          "put_volume": 502476,
+          "total_volume": 1129606
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 693317,
+          "put_volume": 607875,
+          "total_volume": 1301192
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 946901,
+          "put_volume": 1024929,
+          "total_volume": 1971830
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1619366,
+          "put_volume": 1378485,
+          "total_volume": 2997851
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 336920,
+          "put_volume": 232871,
+          "total_volume": 569791
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 55232,
+          "put_volume": 49674,
+          "total_volume": 104906
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1039201,
+          "put_volume": 918251,
+          "total_volume": 1957452
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 75248,
+          "put_volume": 45875,
+          "total_volume": 121123
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 178039,
+          "put_volume": 128655,
+          "total_volume": 306694
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-14",
+      "weighted_pcr": 0.796627,
+      "call_volume": 3320803,
+      "put_volume": 2645442,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 284331,
+          "put_volume": 189055,
+          "total_volume": 473386
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 331429,
+          "put_volume": 266010,
+          "total_volume": 597439
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 640737,
+          "put_volume": 625279,
+          "total_volume": 1266016
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 849533,
+          "put_volume": 704079,
+          "total_volume": 1553612
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 121977,
+          "put_volume": 123535,
+          "total_volume": 245512
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 52287,
+          "put_volume": 41760,
+          "total_volume": 94047
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 767360,
+          "put_volume": 611512,
+          "total_volume": 1378872
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 64663,
+          "put_volume": 21080,
+          "total_volume": 85743
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 208486,
+          "put_volume": 63132,
+          "total_volume": 271618
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-15",
+      "weighted_pcr": 0.744035,
+      "call_volume": 3934152,
+      "put_volume": 2927146,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 354032,
+          "put_volume": 212860,
+          "total_volume": 566892
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 411905,
+          "put_volume": 254516,
+          "total_volume": 666421
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 638549,
+          "put_volume": 579065,
+          "total_volume": 1217614
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1267733,
+          "put_volume": 978898,
+          "total_volume": 2246631
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 154845,
+          "put_volume": 131355,
+          "total_volume": 286200
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 27161,
+          "put_volume": 26275,
+          "total_volume": 53436
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 883782,
+          "put_volume": 656420,
+          "total_volume": 1540202
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 73798,
+          "put_volume": 25000,
+          "total_volume": 98798
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 122347,
+          "put_volume": 62757,
+          "total_volume": 185104
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-16",
+      "weighted_pcr": 0.609509,
+      "call_volume": 6279551,
+      "put_volume": 3827444,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 517566,
+          "put_volume": 342668,
+          "total_volume": 860234
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 610440,
+          "put_volume": 414754,
+          "total_volume": 1025194
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 826139,
+          "put_volume": 699918,
+          "total_volume": 1526057
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 2584964,
+          "put_volume": 1281580,
+          "total_volume": 3866544
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 326325,
+          "put_volume": 198240,
+          "total_volume": 524565
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 65835,
+          "put_volume": 50668,
+          "total_volume": 116503
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1153800,
+          "put_volume": 728699,
+          "total_volume": 1882499
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 66601,
+          "put_volume": 32824,
+          "total_volume": 99425
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 127881,
+          "put_volume": 78093,
+          "total_volume": 205974
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-17",
+      "weighted_pcr": 0.669314,
+      "call_volume": 5027821,
+      "put_volume": 3365191,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 611668,
+          "put_volume": 332951,
+          "total_volume": 944619
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 427741,
+          "put_volume": 347362,
+          "total_volume": 775103
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 785185,
+          "put_volume": 745313,
+          "total_volume": 1530498
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1889569,
+          "put_volume": 1023420,
+          "total_volume": 2912989
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 196846,
+          "put_volume": 143867,
+          "total_volume": 340713
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 30948,
+          "put_volume": 16145,
+          "total_volume": 47093
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 941918,
+          "put_volume": 652779,
+          "total_volume": 1594697
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 48122,
+          "put_volume": 31669,
+          "total_volume": 79791
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 95824,
+          "put_volume": 71685,
+          "total_volume": 167509
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-18",
+      "weighted_pcr": 0.600191,
+      "call_volume": 7269908,
+      "put_volume": 4363336,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 433713,
+          "put_volume": 311742,
+          "total_volume": 745455
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 539908,
+          "put_volume": 403918,
+          "total_volume": 943826
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 1032910,
+          "put_volume": 841244,
+          "total_volume": 1874154
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 3256082,
+          "put_volume": 1472582,
+          "total_volume": 4728664
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 390931,
+          "put_volume": 206287,
+          "total_volume": 597218
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 34658,
+          "put_volume": 38853,
+          "total_volume": 73511
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1347928,
+          "put_volume": 962346,
+          "total_volume": 2310274
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 58582,
+          "put_volume": 45760,
+          "total_volume": 104342
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 175196,
+          "put_volume": 80604,
+          "total_volume": 255800
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-21",
+      "weighted_pcr": 0.742443,
+      "call_volume": 4253082,
+      "put_volume": 3157669,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 393715,
+          "put_volume": 262183,
+          "total_volume": 655898
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 409716,
+          "put_volume": 342173,
+          "total_volume": 751889
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 675933,
+          "put_volume": 600636,
+          "total_volume": 1276569
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1275185,
+          "put_volume": 921319,
+          "total_volume": 2196504
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 160044,
+          "put_volume": 130327,
+          "total_volume": 290371
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 48436,
+          "put_volume": 32566,
+          "total_volume": 81002
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1036633,
+          "put_volume": 755781,
+          "total_volume": 1792414
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 76097,
+          "put_volume": 48775,
+          "total_volume": 124872
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 177323,
+          "put_volume": 63909,
+          "total_volume": 241232
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-22",
+      "weighted_pcr": 0.669351,
+      "call_volume": 5355147,
+      "put_volume": 3584473,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 504525,
+          "put_volume": 301349,
+          "total_volume": 805874
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 472454,
+          "put_volume": 368153,
+          "total_volume": 840607
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 857414,
+          "put_volume": 592967,
+          "total_volume": 1450381
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1730072,
+          "put_volume": 1197240,
+          "total_volume": 2927312
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 253976,
+          "put_volume": 189104,
+          "total_volume": 443080
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 34855,
+          "put_volume": 34462,
+          "total_volume": 69317
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1213408,
+          "put_volume": 789376,
+          "total_volume": 2002784
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 83047,
+          "put_volume": 44276,
+          "total_volume": 127323
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 205396,
+          "put_volume": 67546,
+          "total_volume": 272942
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-23",
+      "weighted_pcr": 0.683505,
+      "call_volume": 3699980,
+      "put_volume": 2528956,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 377581,
+          "put_volume": 262668,
+          "total_volume": 640249
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 310891,
+          "put_volume": 262280,
+          "total_volume": 573171
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 587523,
+          "put_volume": 376460,
+          "total_volume": 963983
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1172942,
+          "put_volume": 796296,
+          "total_volume": 1969238
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 190769,
+          "put_volume": 118775,
+          "total_volume": 309544
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 22825,
+          "put_volume": 25266,
+          "total_volume": 48091
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 775033,
+          "put_volume": 598071,
+          "total_volume": 1373104
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 83826,
+          "put_volume": 41453,
+          "total_volume": 125279
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 178590,
+          "put_volume": 47687,
+          "total_volume": 226277
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-24",
+      "weighted_pcr": 0.782787,
+      "call_volume": 3240723,
+      "put_volume": 2536797,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 408917,
+          "put_volume": 318450,
+          "total_volume": 727367
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 368417,
+          "put_volume": 271554,
+          "total_volume": 639971
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 567447,
+          "put_volume": 426346,
+          "total_volume": 993793
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 985151,
+          "put_volume": 860172,
+          "total_volume": 1845323
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 113052,
+          "put_volume": 71967,
+          "total_volume": 185019
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 24781,
+          "put_volume": 16822,
+          "total_volume": 41603
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 619146,
+          "put_volume": 499722,
+          "total_volume": 1118868
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 55838,
+          "put_volume": 24983,
+          "total_volume": 80821
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 97974,
+          "put_volume": 46781,
+          "total_volume": 144755
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-28",
+      "weighted_pcr": 0.860772,
+      "call_volume": 4609700,
+      "put_volume": 3967899,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 538075,
+          "put_volume": 463621,
+          "total_volume": 1001696
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 630967,
+          "put_volume": 480182,
+          "total_volume": 1111149
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 770003,
+          "put_volume": 671044,
+          "total_volume": 1441047
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1076300,
+          "put_volume": 1137588,
+          "total_volume": 2213888
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 162614,
+          "put_volume": 115337,
+          "total_volume": 277951
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 40872,
+          "put_volume": 17131,
+          "total_volume": 58003
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1148159,
+          "put_volume": 902845,
+          "total_volume": 2051004
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 95399,
+          "put_volume": 69282,
+          "total_volume": 164681
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 147311,
+          "put_volume": 110869,
+          "total_volume": 258180
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-29",
+      "weighted_pcr": 0.655163,
+      "call_volume": 3186276,
+      "put_volume": 2087529,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 320475,
+          "put_volume": 197378,
+          "total_volume": 517853
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 321060,
+          "put_volume": 226845,
+          "total_volume": 547905
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 518386,
+          "put_volume": 402795,
+          "total_volume": 921181
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1044174,
+          "put_volume": 635121,
+          "total_volume": 1679295
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 109330,
+          "put_volume": 83548,
+          "total_volume": 192878
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 44551,
+          "put_volume": 18871,
+          "total_volume": 63422
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 579916,
+          "put_volume": 469622,
+          "total_volume": 1049538
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 98554,
+          "put_volume": 22298,
+          "total_volume": 120852
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 149830,
+          "put_volume": 31051,
+          "total_volume": 180881
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-09-30",
+      "weighted_pcr": 0.665409,
+      "call_volume": 3127645,
+      "put_volume": 2081163,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 299294,
+          "put_volume": 206424,
+          "total_volume": 505718
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 318718,
+          "put_volume": 197311,
+          "total_volume": 516029
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 485810,
+          "put_volume": 337296,
+          "total_volume": 823106
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 960271,
+          "put_volume": 726807,
+          "total_volume": 1687078
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 152393,
+          "put_volume": 87364,
+          "total_volume": 239757
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 68591,
+          "put_volume": 37611,
+          "total_volume": 106202
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 626217,
+          "put_volume": 438185,
+          "total_volume": 1064402
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 78670,
+          "put_volume": 23429,
+          "total_volume": 102099
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 137681,
+          "put_volume": 26736,
+          "total_volume": 164417
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-10-08",
+      "weighted_pcr": 0.8439,
+      "call_volume": 4650784,
+      "put_volume": 3924795,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 478321,
+          "put_volume": 363068,
+          "total_volume": 841389
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 453170,
+          "put_volume": 366248,
+          "total_volume": 819418
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 936496,
+          "put_volume": 749380,
+          "total_volume": 1685876
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1328763,
+          "put_volume": 1290621,
+          "total_volume": 2619384
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 237316,
+          "put_volume": 150981,
+          "total_volume": 388297
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 39470,
+          "put_volume": 25192,
+          "total_volume": 64662
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 992640,
+          "put_volume": 817523,
+          "total_volume": 1810163
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 60392,
+          "put_volume": 53816,
+          "total_volume": 114208
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 124216,
+          "put_volume": 107966,
+          "total_volume": 232182
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-10-09",
+      "weighted_pcr": 0.894147,
+      "call_volume": 5481094,
+      "put_volume": 4900905,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 533977,
+          "put_volume": 403515,
+          "total_volume": 937492
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 506450,
+          "put_volume": 502492,
+          "total_volume": 1008942
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 1085994,
+          "put_volume": 912859,
+          "total_volume": 1998853
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1607173,
+          "put_volume": 1608386,
+          "total_volume": 3215559
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 286957,
+          "put_volume": 227684,
+          "total_volume": 514641
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 57509,
+          "put_volume": 21306,
+          "total_volume": 78815
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1216908,
+          "put_volume": 1007040,
+          "total_volume": 2223948
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 61529,
+          "put_volume": 68985,
+          "total_volume": 130514
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 124597,
+          "put_volume": 148638,
+          "total_volume": 273235
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-10-12",
+      "weighted_pcr": 0.757295,
+      "call_volume": 3774338,
+      "put_volume": 2858288,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 331131,
+          "put_volume": 234725,
+          "total_volume": 565856
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 288937,
+          "put_volume": 260508,
+          "total_volume": 549445
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 637969,
+          "put_volume": 581655,
+          "total_volume": 1219624
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1353734,
+          "put_volume": 889593,
+          "total_volume": 2243327
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 205332,
+          "put_volume": 114682,
+          "total_volume": 320014
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 45903,
+          "put_volume": 13370,
+          "total_volume": 59273
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 787207,
+          "put_volume": 650392,
+          "total_volume": 1437599
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 35844,
+          "put_volume": 30602,
+          "total_volume": 66446
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 88281,
+          "put_volume": 82761,
+          "total_volume": 171042
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-10-13",
+      "weighted_pcr": 0.767522,
+      "call_volume": 5884681,
+      "put_volume": 4516623,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 473715,
+          "put_volume": 390072,
+          "total_volume": 863787
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 508920,
+          "put_volume": 484092,
+          "total_volume": 993012
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 1060034,
+          "put_volume": 867087,
+          "total_volume": 1927121
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1787489,
+          "put_volume": 1316073,
+          "total_volume": 3103562
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 403482,
+          "put_volume": 182870,
+          "total_volume": 586352
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 60286,
+          "put_volume": 20670,
+          "total_volume": 80956
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1364434,
+          "put_volume": 1060253,
+          "total_volume": 2424687
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 70010,
+          "put_volume": 61548,
+          "total_volume": 131558
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 156311,
+          "put_volume": 133958,
+          "total_volume": 290269
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-10-14",
+      "weighted_pcr": 0.684617,
+      "call_volume": 4596667,
+      "put_volume": 3146955,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 403439,
+          "put_volume": 308403,
+          "total_volume": 711842
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 394022,
+          "put_volume": 352869,
+          "total_volume": 746891
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 843213,
+          "put_volume": 635442,
+          "total_volume": 1478655
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1590939,
+          "put_volume": 860108,
+          "total_volume": 2451047
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 135421,
+          "put_volume": 91043,
+          "total_volume": 226464
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 43663,
+          "put_volume": 12312,
+          "total_volume": 55975
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 980461,
+          "put_volume": 762922,
+          "total_volume": 1743383
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 60500,
+          "put_volume": 39511,
+          "total_volume": 100011
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 145009,
+          "put_volume": 84345,
+          "total_volume": 229354
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-10-15",
+      "weighted_pcr": 0.809686,
+      "call_volume": 6789279,
+      "put_volume": 5497186,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 698082,
+          "put_volume": 574257,
+          "total_volume": 1272339
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 799082,
+          "put_volume": 719219,
+          "total_volume": 1518301
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 1224438,
+          "put_volume": 1062058,
+          "total_volume": 2286496
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1778180,
+          "put_volume": 1522221,
+          "total_volume": 3300401
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 244083,
+          "put_volume": 170506,
+          "total_volume": 414589
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 69893,
+          "put_volume": 21393,
+          "total_volume": 91286
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1587027,
+          "put_volume": 1114869,
+          "total_volume": 2701896
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 108466,
+          "put_volume": 115629,
+          "total_volume": 224095
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 280028,
+          "put_volume": 197034,
+          "total_volume": 477062
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-10-16",
+      "weighted_pcr": 0.712855,
+      "call_volume": 5872047,
+      "put_volume": 4185916,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 621465,
+          "put_volume": 426473,
+          "total_volume": 1047938
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 676375,
+          "put_volume": 578222,
+          "total_volume": 1254597
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 1060077,
+          "put_volume": 906684,
+          "total_volume": 1966761
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1416362,
+          "put_volume": 979640,
+          "total_volume": 2396002
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 180296,
+          "put_volume": 114883,
+          "total_volume": 295179
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 84294,
+          "put_volume": 18726,
+          "total_volume": 103020
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1544013,
+          "put_volume": 975842,
+          "total_volume": 2519855
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 91902,
+          "put_volume": 69478,
+          "total_volume": 161380
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 197263,
+          "put_volume": 115968,
+          "total_volume": 313231
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-10-19",
+      "weighted_pcr": 0.658217,
+      "call_volume": 5797408,
+      "put_volume": 3815951,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 723080,
+          "put_volume": 442756,
+          "total_volume": 1165836
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 559043,
+          "put_volume": 411820,
+          "total_volume": 970863
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 949255,
+          "put_volume": 868651,
+          "total_volume": 1817906
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1629918,
+          "put_volume": 922342,
+          "total_volume": 2552260
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 387028,
+          "put_volume": 103697,
+          "total_volume": 490725
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 48790,
+          "put_volume": 12584,
+          "total_volume": 61374
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1178601,
+          "put_volume": 878515,
+          "total_volume": 2057116
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 164468,
+          "put_volume": 50931,
+          "total_volume": 215399
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 157225,
+          "put_volume": 124655,
+          "total_volume": 281880
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-10-20",
+      "weighted_pcr": 0.718355,
+      "call_volume": 5623567,
+      "put_volume": 4039717,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 631234,
+          "put_volume": 414875,
+          "total_volume": 1046109
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 854202,
+          "put_volume": 443736,
+          "total_volume": 1297938
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 926780,
+          "put_volume": 787409,
+          "total_volume": 1714189
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1343998,
+          "put_volume": 1092775,
+          "total_volume": 2436773
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 281140,
+          "put_volume": 118682,
+          "total_volume": 399822
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 72590,
+          "put_volume": 12727,
+          "total_volume": 85317
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1309555,
+          "put_volume": 1017230,
+          "total_volume": 2326785
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 60562,
+          "put_volume": 59064,
+          "total_volume": 119626
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 143506,
+          "put_volume": 93219,
+          "total_volume": 236725
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-10-21",
+      "weighted_pcr": 0.770725,
+      "call_volume": 4242447,
+      "put_volume": 3269761,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 370372,
+          "put_volume": 244934,
+          "total_volume": 615306
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 420361,
+          "put_volume": 400420,
+          "total_volume": 820781
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 770643,
+          "put_volume": 724952,
+          "total_volume": 1495595
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1026559,
+          "put_volume": 807259,
+          "total_volume": 1833818
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 142358,
+          "put_volume": 73319,
+          "total_volume": 215677
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 67658,
+          "put_volume": 13111,
+          "total_volume": 80769
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1234485,
+          "put_volume": 883179,
+          "total_volume": 2117664
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 60253,
+          "put_volume": 45556,
+          "total_volume": 105809
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 149758,
+          "put_volume": 77031,
+          "total_volume": 226789
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-10-22",
+      "weighted_pcr": 0.935229,
+      "call_volume": 5899383,
+      "put_volume": 5517277,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 574056,
+          "put_volume": 467561,
+          "total_volume": 1041617
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 706132,
+          "put_volume": 651826,
+          "total_volume": 1357958
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 1059778,
+          "put_volume": 1041155,
+          "total_volume": 2100933
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 1403030,
+          "put_volume": 1370625,
+          "total_volume": 2773655
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 207613,
+          "put_volume": 133196,
+          "total_volume": 340809
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 79333,
+          "put_volume": 32369,
+          "total_volume": 111702
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 1636568,
+          "put_volume": 1529501,
+          "total_volume": 3166069
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 73384,
+          "put_volume": 106943,
+          "total_volume": 180327
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 159489,
+          "put_volume": 184101,
+          "total_volume": 343590
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    },
+    {
+      "date": "2026-10-23",
+      "weighted_pcr": 0.783089,
+      "call_volume": 9478758,
+      "put_volume": 7422708,
+      "sse_products": 5,
+      "szse_products": 4,
+      "components": [
+        {
+          "exchange": "SSE",
+          "code": "510050",
+          "name": "上证50ETF华夏",
+          "call_volume": 764368,
+          "put_volume": 585184,
+          "total_volume": 1349552
+        },
+        {
+          "exchange": "SSE",
+          "code": "510300",
+          "name": "沪深300ETF华泰柏瑞",
+          "call_volume": 877435,
+          "put_volume": 826737,
+          "total_volume": 1704172
+        },
+        {
+          "exchange": "SSE",
+          "code": "510500",
+          "name": "中证500ETF南方",
+          "call_volume": 1760017,
+          "put_volume": 1419162,
+          "total_volume": 3179179
+        },
+        {
+          "exchange": "SSE",
+          "code": "588000",
+          "name": "科创50ETF华夏",
+          "call_volume": 2573750,
+          "put_volume": 1894195,
+          "total_volume": 4467945
+        },
+        {
+          "exchange": "SSE",
+          "code": "588080",
+          "name": "科创50ETF易方达",
+          "call_volume": 386049,
+          "put_volume": 205735,
+          "total_volume": 591784
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159901",
+          "name": "深证100ETF易方达",
+          "call_volume": 145210,
+          "put_volume": 24300,
+          "total_volume": 169510
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159915",
+          "name": "创业板ETF易方达",
+          "call_volume": 2526987,
+          "put_volume": 2061769,
+          "total_volume": 4588756
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159919",
+          "name": "沪深300ETF嘉实",
+          "call_volume": 150991,
+          "put_volume": 141707,
+          "total_volume": 292698
+        },
+        {
+          "exchange": "SZSE",
+          "code": "159922",
+          "name": "中证500ETF嘉实",
+          "call_volume": 293951,
+          "put_volume": 263919,
+          "total_volume": 557870
+        }
+      ],
+      "scope_verified": false,
+      "source": "SSE+SZSE ETF options daily statistics"
+    }
+  ]
+}
