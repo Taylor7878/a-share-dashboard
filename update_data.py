@@ -1,201 +1,700 @@
-"""Collect close-of-day full A-share TRIN and SMA20 breadth for GitHub Pages.
 
-Primary: Eastmoney via AKShare. Fallback: Sina via AKShare.
-Do not publish partial-market samples or pre-close quotes as finalized EOD data.
-SMA20 needs 20 successfully collected trading-session snapshots.
+"""全A股真实行情采集：SMA20市场宽度 + 阿姆斯指数TRIN。
+
+优先尝试公开的每日全市场K线CSV。
+备用数据源为AKShare的腾讯、东方财富行情接口。
+采集失败时不生成模拟行情，也不覆盖已有的有效数据。
 """
+
 from __future__ import annotations
 
 import datetime as dt
+import io
 import json
+import math
 import re
 import time
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-import akshare as ak
 import pandas as pd
+import requests
 
 ROOT = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "data"
-OUTPUT = DATA_DIR / "market.json"
-CACHE = DATA_DIR / "price_cache.json"
+CACHE_FILE = DATA_DIR / "price_cache.json"
+OUTPUT_FILE = DATA_DIR / "market.json"
+
 CHINA_TZ = ZoneInfo("Asia/Shanghai")
-MIN_UNIVERSE = 3500
-MIN_ACTIVE_COVERAGE = 0.70
-MIN_SMA20_COVERAGE = 0.85
-MIN_BJ_LISTINGS = 100  # Reject source that silently omits Beijing Stock Exchange.
-KEEP_SNAPSHOTS = 45
-KEEP_HISTORY = 250
+BASE_URL = "https://money-tree.eyunzhu.com/daily_kline/date/"
+
+MIN_LISTINGS = 3500
+MIN_BEIJING = 100
+MIN_VALID_RATIO = 0.75
+MIN_BREADTH_COVERAGE = 0.85
+CACHE_LIMIT = 55
+
+HEADERS = {
+    "User-Agent": "AshareBreadthResearch/1.0",
+    "Accept": "text/csv,text/plain,*/*",
+}
 
 
-def retry(call, name, attempts=2):
-    last_error = None
-    for attempt in range(1, attempts + 1):
-        try:
-            return call()
-        except Exception as exc:
-            last_error = exc
-            print(f"{name} attempt {attempt}/{attempts}: {type(exc).__name__}: {exc}", flush=True)
-            if attempt != attempts:
-                time.sleep(attempt * 4)
-    raise last_error
+def log(*args):
+    print(*args, flush=True)
 
 
-def read_json(path: Path, default):
-    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else default
+def read_json(path, default):
+    if not path.exists():
+        return default
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
-def save_json(path: Path, data):
+def write_json(path, data):
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-    temporary.replace(path)
+    temp = path.with_name(path.name + ".tmp")
+    temp.write_text(
+        json.dumps(data, ensure_ascii=False, separators=(",", ":")),
+        encoding="utf-8",
+    )
+    temp.replace(path)
+
+
+def normalize_code(raw):
+    s = str(raw).strip().lower().replace(" ", "")
+    m = re.fullmatch(
+        r"(?:(sh|sz|bj)\.?([0-9]{6})|([0-9]{6})\.(sh|sz|bj)|([0-9]{6}))",
+        s,
+    )
+    if not m:
+        return None
+
+    prefix, a, b, suffix, plain = m.groups()
+    code = a or b or plain
+
+    sh = ("600", "601", "603", "605", "688", "689")
+    sz = ("000", "001", "002", "003", "300", "301")
+
+    if code.startswith(sh):
+        market = "sh"
+    elif code.startswith(sz):
+        market = "sz"
+    elif re.fullmatch(r"(?:[48]\d{5}|92\d{4})", code):
+        market = "bj"
+    else:
+        return None
+
+    if (prefix or suffix) and (prefix or suffix) != market:
+        return None
+
+    return market + code
+
+
+def find_column(df, names, required=True):
+    mapping = {
+        str(c).strip().lower().replace(" ", "").replace("_", ""): c
+        for c in df.columns
+    }
+
+    for name in names:
+        key = str(name).strip().lower().replace(" ", "").replace("_", "")
+        if key in mapping:
+            return mapping[key]
+
+    if required:
+        raise ValueError(
+            f"Missing required columns {names}; received {list(df.columns)}"
+        )
+
+    return None
+
+
+def read_csv_bytes(content):
+    decoded = None
+
+    for encoding in ("utf-8-sig", "gb18030"):
+        try:
+            decoded = content.decode(encoding)
+            break
+        except UnicodeDecodeError:
+            continue
+
+    if decoded is None:
+        raise ValueError("Cannot decode CSV")
+
+    if decoded.lstrip().startswith(("<html", "<!DOCTYPE", "{", "[")):
+        raise ValueError("Response is not a daily price CSV")
+
+    if decoded.count("\n") < MIN_LISTINGS:
+        raise ValueError("CSV has too few rows")
+
+    first = decoded.splitlines()[0].split(",")
+    headerless = (
+        len(first) >= 7
+        and normalize_code(first[0].strip('"')) is not None
+    )
+
+    if headerless:
+        df = pd.read_csv(
+            io.StringIO(decoded),
+            header=None,
+            low_memory=False,
+        )
+        names = [
+            "symbol", "date", "open", "close",
+            "high", "low", "volume", "amount",
+        ]
+        df.columns = [
+            names[i] if i < len(names) else f"extra{i}"
+            for i in range(len(df.columns))
+        ]
+    else:
+        df = pd.read_csv(io.StringIO(decoded), low_memory=False)
+
+    return df
+
+
+def parse_daily_csv(df, target_date):
+    symbol_col = find_column(
+        df, ["symbol", "ts_code", "code", "股票代码", "代码"]
+    )
+    close_col = find_column(
+        df, ["close", "收盘", "收盘价", "closeprice"]
+    )
+    volume_col = find_column(
+        df, ["volume", "vol", "成交量", "volume_shares"]
+    )
+    date_col = find_column(
+        df, ["date", "trade_date", "交易日期", "日期"],
+        required=False,
+    )
+
+    if date_col is not None:
+        dates = pd.to_datetime(
+            df[date_col].astype(str), errors="coerce"
+        ).dt.date
+        df = df.loc[dates == target_date].copy()
+
+    codes = df[symbol_col].map(normalize_code)
+    valid_codes = codes.notna() & ~codes.duplicated()
+
+    clean = df.loc[valid_codes].copy()
+    codes = codes.loc[valid_codes]
+
+    close = pd.to_numeric(clean[close_col], errors="coerce")
+    volume = pd.to_numeric(clean[volume_col], errors="coerce")
+
+    valid = close.gt(0) & volume.gt(0)
+
+    total = len(clean)
+    active = int(valid.sum())
+    bj = int(codes.str.startswith("bj").sum())
+
+    if (
+        total < MIN_LISTINGS
+        or bj < MIN_BEIJING
+        or active < MIN_VALID_RATIO * total
+    ):
+        raise ValueError(
+            f"Incomplete A-share data: total={total}, "
+            f"active={active}, Beijing={bj}"
+        )
+
+    quotes = {
+        symbol: [float(price), float(vol)]
+        for symbol, price, vol in zip(
+            codes.loc[valid],
+            close.loc[valid],
+            volume.loc[valid],
+        )
+    }
+
+    return {
+        "quotes": quotes,
+        "total": total,
+        "active": active,
+        "bj": bj,
+        "provider": "Money Tree daily CSV",
+    }
+
+
+def fetch_csv(day, session):
+    url = BASE_URL + day.strftime("%Y%m%d") + ".csv"
+
+    response = session.get(
+        url,
+        headers=HEADERS,
+        timeout=(10, 30),
+    )
+
+    if response.status_code in (404, 410):
+        return None
+
+    response.raise_for_status()
+
+    if len(response.content) < 60000:
+        raise ValueError("Daily CSV is unexpectedly small")
+
+    df = read_csv_bytes(response.content)
+    return parse_daily_csv(df, day)
+
+
+def collect_csv_history(now, snapshots):
+    last_day = (
+        now.date()
+        if now.hour >= 17
+        else now.date() - dt.timedelta(days=1)
+    )
+
+    days = [
+        last_day - dt.timedelta(days=i)
+        for i in range(57)
+    ]
+
+    days = [d for d in days if d.weekday() < 5]
+    days.sort(reverse=True)
+
+    good = 0
+    failures = 0
+
+    with requests.Session() as session:
+        for day in days:
+            key = day.isoformat()
+
+            if key in snapshots:
+                good += 1
+                if good >= 23:
+                    break
+                continue
+
+            try:
+                result = fetch_csv(day, session)
+
+                if result is None:
+                    continue
+
+                snapshots[key] = result
+                good += 1
+
+                log(
+                    "[CSV]",
+                    key,
+                    result["active"],
+                    "active stocks",
+                    "BJ:",
+                    result["bj"],
+                )
+
+                if good >= 23:
+                    break
+
+                time.sleep(1)
+
+            except Exception as error:
+                log("[CSV] Failed:", key, str(error))
+                failures += 1
+
+                if failures >= 6 and good == 0:
+                    break
+
+    return snapshots
 
 
 def is_trading_day(day):
-    days = retry(ak.tool_trade_date_hist_sina, "Trading calendar", attempts=2)
-    if "trade_date" not in days.columns:
-        raise RuntimeError("Trading calendar schema changed")
-    return day in set(pd.to_datetime(days["trade_date"]).dt.date)
+    import akshare as ak
+
+    calendar = ak.tool_trade_date_hist_sina()
+    dates = set(
+        pd.to_datetime(calendar["trade_date"]).dt.date
+    )
+    return day in dates
 
 
-def get_codes(raw_codes):
-    """Accept Eastmoney '600000' and Sina 'sh600000' formats."""
-    values = raw_codes.astype(str).str.strip().str.lower()
-    # Only six-digit mainland security identifiers, optionally prefixed sh/sz/bj.
-    return values.str.extract(r"^(?:(?:sh|sz|bj))?(\d{6})$", expand=False)
+def parse_spot(df, provider):
+    code_col = find_column(
+        df, ["代码", "code", "symbol", "stock_code"]
+    )
+    price_col = find_column(
+        df, ["最新价", "price", "trade", "current_price", "now"]
+    )
+    volume_col = find_column(
+        df, ["成交量", "volume", "vol", "total_volume"]
+    )
 
+    pct_col = find_column(
+        df,
+        ["涨跌幅", "change_percent", "pct_chg", "percent"],
+        required=False,
+    )
 
-def is_stock_code(code):
-    """Exclude funds/indices when providers return other exchange instruments."""
-    return bool(re.fullmatch(r"(?:600|601|603|605|688|689|000|001|002|003|300|301|4\d{2}|8\d{2}|92\d)\d{3}", code))
+    prev_col = find_column(
+        df,
+        ["昨收", "pre_close", "prev_close"],
+        required=False,
+    )
 
+    if pct_col is None and prev_col is None:
+        raise ValueError("No price-change field available")
 
-def normalize_market(df, name):
-    required = {"代码", "最新价", "涨跌幅", "成交量"}
-    if df is None or df.empty or not required.issubset(df.columns):
-        raise RuntimeError(f"{name}: expected quote columns missing")
-    df = df.copy()
-    code = get_codes(df["代码"])
-    valid = code.notna() & code.map(lambda x: is_stock_code(x) if isinstance(x, str) else False) & ~code.duplicated()
-    df = df.loc[valid].copy()
-    df["code"] = code.loc[valid]
-    total = len(df)
-    bj = int(df["code"].str.match(r"(?:[48]\d{5}|92\d{4})").sum())
-    # BJ prefixes such as 4xxxxx/8xxxxx/92xxxxxx are all 6 digits; regex above checks them.
-    print(f"{name}: stock listings={total}, Beijing candidates={bj}", flush=True)
-    if total < MIN_UNIVERSE or bj < MIN_BJ_LISTINGS:
-        raise RuntimeError(f"{name}: incomplete full A-share sample ({total} listings, {bj} BJ listings)")
+    codes = df[code_col].map(normalize_code)
+    mask = codes.notna() & ~codes.duplicated()
 
-    close = pd.to_numeric(df["最新价"], errors="coerce")
-    pct = pd.to_numeric(df["涨跌幅"], errors="coerce")
-    vol = pd.to_numeric(df["成交量"], errors="coerce")
-    # Eastmoney supplies hands (lots of 100 shares); Sina supplies shares.
-    if name == "Sina":
-        vol = vol / 100.0
-    ok = close.notna() & close.gt(0) & pct.notna() & vol.notna() & vol.gt(0)
-    active = int(ok.sum())
-    if active < total * MIN_ACTIVE_COVERAGE:
-        raise RuntimeError(f"{name}: too few active quotes ({active}/{total})")
-    up = ok & pct.gt(0)
-    down = ok & pct.lt(0)
-    up_count, down_count = int(up.sum()), int(down.sum())
-    up_vol = float(vol[up].sum())
-    down_vol = float(vol[down].sum())
-    if min(up_count, down_count, up_vol, down_vol) <= 0:
-        raise RuntimeError(f"{name}: invalid TRIN inputs")
-    trin = round((up_count / down_count) / (up_vol / down_vol), 4)
-    if not (0 < trin < 100):
-        raise RuntimeError(f"{name}: TRIN out of expected bounds")
-    prices = {
-        symbol: round(float(value), 4)
-        for symbol, value in zip(df.loc[ok, "code"], close.loc[ok])
+    work = df.loc[mask].copy()
+    codes = codes.loc[mask]
+
+    price = pd.to_numeric(work[price_col], errors="coerce")
+    volume = pd.to_numeric(work[volume_col], errors="coerce")
+
+    if pct_col is not None:
+        pct = pd.to_numeric(
+            work[pct_col].astype(str).str.replace(
+                "%", "", regex=False
+            ),
+            errors="coerce",
+        )
+    else:
+        previous = pd.to_numeric(
+            work[prev_col], errors="coerce"
+        )
+        pct = (price / previous - 1) * 100
+
+    valid = price.gt(0) & volume.gt(0) & pct.notna()
+
+    total = len(work)
+    active = int(valid.sum())
+    bj = int(codes.str.startswith("bj").sum())
+
+    if (
+        total < MIN_LISTINGS
+        or bj < MIN_BEIJING
+        or active < MIN_VALID_RATIO * total
+    ):
+        raise ValueError(
+            f"{provider}: incomplete market coverage "
+            f"total={total}, active={active}, BJ={bj}"
+        )
+
+    quotes = {
+        symbol: [float(p), float(v)]
+        for symbol, p, v in zip(
+            codes.loc[valid],
+            price.loc[valid],
+            volume.loc[valid],
+        )
     }
-    return prices, {
-        "trin": trin,
+
+    changes = {
+        symbol: float(p)
+        for symbol, p in zip(
+            codes.loc[valid],
+            pct.loc[valid],
+        )
+    }
+
+    return {
+        "quotes": quotes,
+        "pct": changes,
+        "total": total,
+        "active": active,
+        "bj": bj,
+        "provider": provider,
+    }
+
+
+def collect_spot(now, snapshots):
+    if now.hour < 17 or now.weekday() >= 5:
+        return None
+
+    try:
+        if not is_trading_day(now.date()):
+            return None
+    except Exception as error:
+        log("Cannot confirm trading day:", error)
+        return None
+
+    import akshare as ak
+
+    providers = [
+        ("Tencent", ak.stock_zh_a_spot_tx),
+        ("Eastmoney", ak.stock_zh_a_spot_em),
+    ]
+
+    for name, fetch in providers:
+        try:
+            result = parse_spot(fetch(), name)
+
+            previous_days = [
+                day for day in snapshots
+                if day < now.date().isoformat()
+            ]
+
+            if previous_days:
+                previous = snapshots[max(previous_days)]["quotes"]
+                overlap = [
+                    (v[0], previous[k][0])
+                    for k, v in result["quotes"].items()
+                    if k in previous
+                ]
+
+                if len(overlap) >= 3000:
+                    changed = sum(
+                        abs(a - b) > 0.0001
+                        for a, b in overlap
+                    )
+
+                    if changed < 500:
+                        raise ValueError(
+                            "Possible stale market snapshot"
+                        )
+
+            log(
+                "[SPOT]", name,
+                result["active"], "stocks"
+            )
+            return result
+
+        except Exception as error:
+            log("[SPOT]", name, "failed:", error)
+
+    return None
+
+
+def calculate_day(date, entry, previous, recent):
+    current = entry["quotes"]
+    pct = entry.get("pct")
+
+    if pct is None:
+        if previous is None:
+            return None
+
+        old = previous["quotes"]
+        pct = {
+            k: 100 * (v[0] / old[k][0] - 1)
+            for k, v in current.items()
+            if k in old and old[k][0] > 0
+        }
+
+    up_count = 0
+    down_count = 0
+    up_volume = 0.0
+    down_volume = 0.0
+
+    for symbol, values in current.items():
+        change = pct.get(symbol)
+
+        if change is None or not math.isfinite(change):
+            continue
+
+        volume = values[1]
+
+        if change > 0:
+            up_count += 1
+            up_volume += volume
+        elif change < 0:
+            down_count += 1
+            down_volume += volume
+
+    if min(
+        up_count,
+        down_count,
+        up_volume,
+        down_volume,
+    ) <= 0:
+        return None
+
+    trin = (
+        (up_count / down_count)
+        / (up_volume / down_volume)
+    )
+
+    if not 0.01 < trin < 40:
+        return None
+
+    above = 0
+    eligible = 0
+
+    if len(recent) >= 20:
+        for symbol, values in current.items():
+            prices = [
+                day["quotes"][symbol][0]
+                for day in recent
+                if symbol in day["quotes"]
+            ]
+
+            if len(prices) < 20:
+                continue
+
+            sma20 = sum(prices[-20:]) / 20
+            eligible += 1
+
+            if values[0] > sma20:
+                above += 1
+
+    coverage = (
+        eligible / entry["active"]
+        if entry["active"] else 0
+    )
+
+    breadth = None
+
+    if (
+        eligible > 0
+        and coverage >= MIN_BREADTH_COVERAGE
+    ):
+        breadth = round(
+            100 * above / eligible, 2
+        )
+
+    return {
+        "date": date,
+        "trin": round(trin, 4),
+        "breadth": breadth,
         "advancers": up_count,
         "decliners": down_count,
-        "up_volume": round(up_vol, 2),
-        "down_volume": round(down_vol, 2),
-        "active_count": active,
-        "total_count": total,
-        "data_provider": name,
+        "up_volume": round(up_volume, 3),
+        "down_volume": round(down_volume, 3),
+        "active_count": entry["active"],
+        "total_count": entry["total"],
+        "beijing_count": entry["bj"],
+        "valid_count": eligible,
+        "coverage_pct": round(coverage * 100, 1),
+        "warmup_sessions": min(len(recent), 20),
+        "data_provider": entry["provider"],
+        "price_basis": "unadjusted close",
+        "volume_basis": "provider-native",
     }
 
 
-def fetch_market():
-    errors = []
-    for source, getter in (("Eastmoney", ak.stock_zh_a_spot_em), ("Sina", ak.stock_zh_a_spot)):
-        try:
-            df = retry(getter, source, attempts=2)
-            return normalize_market(df, source)
-        except Exception as exc:
-            errors.append(f"{source}: {type(exc).__name__}: {exc}")
-            print(f"{source} not usable; trying alternate source if available", flush=True)
-    raise RuntimeError("Both quote sources failed: " + " | ".join(errors))
+def build_history(snapshots):
+    dates = sorted(snapshots)
+    history = []
 
+    for i, day in enumerate(dates):
+        previous = (
+            snapshots[dates[i - 1]]
+            if i > 0 else None
+        )
 
-def calculate_breadth(snapshots, current_day, active_count):
-    sessions = sorted(snapshots)
-    if len(sessions) < 20:
-        return None, 0, len(sessions)
-    current_prices = snapshots[current_day]
-    recent_days = sessions[-KEEP_SNAPSHOTS:]
-    above = valid = 0
-    for code, close in current_prices.items():
-        values = [snapshots[date][code] for date in recent_days if code in snapshots[date]]
-        if len(values) < 20:
-            continue
-        valid += 1
-        above += close > sum(values[-20:]) / 20
-    if not active_count or valid / active_count < MIN_SMA20_COVERAGE:
-        return None, valid, len(sessions)
-    return round(100 * above / valid, 2), valid, len(sessions)
+        recent = [
+            snapshots[k]
+            for k in dates[max(0, i - 39):i + 1]
+        ]
+
+        result = calculate_day(
+            day,
+            snapshots[day],
+            previous,
+            recent,
+        )
+
+        if result is not None:
+            history.append(result)
+
+    return history[-250:]
 
 
 def main():
     now = dt.datetime.now(CHINA_TZ)
-    today = now.date()
-    # Any manual US-evening trigger can be the NEXT MORNING in China.
-    # Avoid stamping yesterday's closing snapshot as today's quote.
-    if now.hour < 16:
-        print(f"China time {now:%Y-%m-%d %H:%M}; before 16:00, skip snapshot. Website deployment can still proceed.")
-        return
-    if today.weekday() >= 5 or not is_trading_day(today):
-        print(f"{today}: non-trading day; keeping previously published data")
-        return
 
-    prices, record = fetch_market()
-    record["date"] = today.isoformat()
-    cache = read_json(CACHE, {"snapshots": {}})
-    snapshots = cache.get("snapshots", {})
-    if not isinstance(snapshots, dict):
-        raise RuntimeError("Invalid cache structure")
-    snapshots[today.isoformat()] = prices
-    snapshots = {key: snapshots[key] for key in sorted(snapshots)[-KEEP_SNAPSHOTS:]}
-    breadth, valid_count, sessions = calculate_breadth(snapshots, today.isoformat(), record["active_count"])
-    record.update({
-        "breadth": breadth,
-        "valid_count": valid_count,
-        "warmup_sessions": min(sessions, 20),
-        "coverage_pct": round(100 * valid_count / record["active_count"], 1),
-    })
-    previous = read_json(OUTPUT, {"history": []})
-    history_map = {entry["date"]: entry for entry in previous.get("history", []) if "date" in entry}
-    history_map[today.isoformat()] = record
-    history = [history_map[date] for date in sorted(history_map)[-KEEP_HISTORY:]]
-    output = {
-        "source": f"AKShare / {record['data_provider']} · 沪深京全A股盘后快照",
-        "universe": "沪市 + 深市 + 北交所A股；当天有成交、行情有效的股票",
-        "updated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
-        "breadth_method": "全A股活跃样本中收盘价高于最近20次有效交易日收盘价均值的比例；覆盖率不低于85%",
+    log(
+        "China time:",
+        now.strftime("%Y-%m-%d %H:%M:%S")
+    )
+
+    saved = read_json(
+        CACHE_FILE, {"snapshots": {}}
+    )
+
+    snapshots = saved.get("snapshots", {})
+
+    snapshots = collect_csv_history(
+        now, snapshots
+    )
+
+    completed = (
+        now.date()
+        if now.hour >= 17
+        else now.date() - dt.timedelta(days=1)
+    )
+
+    latest = max(snapshots) if snapshots else None
+
+    if (
+        completed == now.date()
+        and latest != now.date().isoformat()
+    ):
+        spot = collect_spot(now, snapshots)
+
+        if spot is not None:
+            snapshots[now.date().isoformat()] = spot
+
+    if not snapshots:
+        raise RuntimeError(
+            "No verified real A-share market data available"
+        )
+
+    dates = sorted(snapshots)[-CACHE_LIMIT:]
+    snapshots = {
+        key: snapshots[key]
+        for key in dates
+    }
+
+    history = build_history(snapshots)
+
+    if not history:
+        raise RuntimeError(
+            "Insufficient real historical quotes for TRIN"
+        )
+
+    last_date = dt.date.fromisoformat(
+        history[-1]["date"]
+    )
+
+    age = (completed - last_date).days
+
+    if age > 7:
+        raise RuntimeError(
+            f"Market data too old: {last_date}"
+        )
+
+    latest_record = history[-1]
+
+    payload = {
+        "source": (
+            "REAL - "
+            + latest_record["data_provider"]
+        ),
+        "status": "real",
+        "updated_at": dt.datetime.now(
+            dt.timezone.utc
+        ).isoformat(),
+        "asof": last_date.isoformat(),
+        "universe": (
+            "Shanghai, Shenzhen and Beijing A-shares"
+        ),
         "history": history,
     }
-    save_json(CACHE, {"snapshots": snapshots})
-    save_json(OUTPUT, output)
-    label = f"{breadth}%" if breadth is not None else f"warming up ({sessions}/20 sessions)"
-    print(f"{today}: source={record['data_provider']} active={record['active_count']}; TRIN={record['trin']}; breadth={label}")
+
+    write_json(
+        CACHE_FILE,
+        {"snapshots": snapshots},
+    )
+
+    write_json(
+        OUTPUT_FILE,
+        payload,
+    )
+
+    log(
+        "PUBLISHED REAL:",
+        last_date,
+        "stocks=",
+        latest_record["active_count"],
+        "TRIN=",
+        latest_record["trin"],
+        "SMA20 breadth=",
+        latest_record["breadth"],
+    )
 
 
 if __name__ == "__main__":
