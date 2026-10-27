@@ -1,484 +1,399 @@
 
-"""真实沪深ETF期权PCR采集程序。
+"""沪深ETF期权成交量PCR真实历史采集（约250交易日，逐次补齐）。
 
-数据来源：
-上交所ETF期权每日统计
-深交所ETF期权每日统计
-
-公式：
-加权PCR = 全部认沽成交量 / 全部认购成交量
-
-等价于按认购成交量加权各ETF的PCR。
-
-注意：尚未纳入中金所股指期权和商品期权，
-因此不能称为全市场期权PCR。
+仅上交所/深交所ETF期权，不包括中金所股指或商品期权。
+合并PCR = sum(认沽成交量) / sum(认购成交量)，不是成交额加权。
+失败日保留为空，不用前日数据代替；旧的有效历史不会因缺档被截断。
 """
-
-from __future__ import annotations
-
 import datetime as dt
 import json
 import math
 import time
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
+import exchange_calendars as xcals
+import pandas as pd
 import requests
 
-
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT / "data"
+DATA = ROOT / 'data'
+CACHE = DATA / 'options_etf_cache.json'
+OUTPUT = DATA / 'options_pcr.json'
+TZ = ZoneInfo('Asia/Shanghai')
+SSE_URL = 'https://query.sse.com.cn/commonQuery.do'
+SZSE_URL = 'https://investor.szse.cn/api/report/ShowReport/data'
 
-MARKET = DATA / "market.json"
-OUTPUT = DATA / "options_pcr.json"
-CACHE = DATA / "options_etf_cache.json"
+MAX_NEW_PER_RUN = 35
+A
 
-SSE_URLS = [
-    "https://query.sse.com.cn/commonQuery.do",
-    "http://query.sse.com.cn/commonQuery.do",
-]
-
-SZSE_URL = (
-    "https://investor.szse.cn"
-    "/api/report/ShowReport/data"
-)
+SZSE_HEADERS = {
+    'User-Agent': 'Mozilla/5.0',
+    'Referer': 'https://investor.szse.cn/',
+    'Accept': 'application/json,*/*'
+}
 
 
-def read_json(path, default):
-    if not path.exists():
-        return default
-
+def load(path, default):
     try:
         return json.loads(
-            path.read_text(encoding="utf-8")
+            path.read_text(encoding='utf-8')
         )
-    except (ValueError, OSError):
+    except (FileNotFoundError, ValueError, OSError):
         return default
 
 
-def save_json(path, obj):
-    path.parent.mkdir(
-        parents=True, exist_ok=True
-    )
-
-    temp = path.with_name(
-        path.name + ".tmp"
-    )
-
-    temp.write_text(
+def save(path, obj):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + '.tmp')
+    tmp.write_text(
         json.dumps(
-            obj,
-            ensure_ascii=False,
-            indent=2
+            obj, ensure_ascii=False,
+            separators=(',', ':')
         ),
-        encoding="utf-8"
+        encoding='utf-8'
     )
+    tmp.replace(path)
 
-    temp.replace(path)
 
-
-def to_number(value):
+def number(raw):
     try:
-        result = float(
-            str(value).replace(",", "").strip()
-        )
-
-        if math.isfinite(result):
-            return result
-
-    except (ValueError, TypeError):
-        pass
-
-    return None
+        n = float(str(raw).replace(',', '').strip())
+        return n if math.isfinite(n) else None
+    except (TypeError, ValueError):
+        return None
 
 
-def parse_rows(rows, exchange):
-    products = []
-
+def parse(rows, exchange, date):
+    parsed = []
     for r in rows:
-        if exchange == "SSE":
+        if not isinstance(r, dict):
+            continue
+
+        if exchange == 'SSE':
             code = str(
-                r.get("SECURITY_CODE", "")
+                r.get('SECURITY_CODE', '')
             ).strip()
-
-            name = r.get(
-                "SECURITY_ABBR", ""
+            name = str(r.get('SECURITY_ABBR', ''))
+            call, put, total = (
+                number(r.get(k))
+                for k in (
+                    'CALL_VOLUME',
+                    'PUT_VOLUME',
+                    'TOTAL_VOLUME'
+                )
             )
+            actual = str(
+                r.get('TRADE_DATE') or ''
+            ).replace('-', '').replace('/', '')[:8]
 
-            call = to_number(
-                r.get("CALL_VOLUME")
-            )
-
-            put = to_number(
-                r.get("PUT_VOLUME")
-            )
-
-            total = to_number(
-                r.get("TOTAL_VOLUME")
-            )
-
+            if actual and actual != date.replace('-', ''):
+                continue
         else:
-            code = str(
-                r.get("bddm", "")
-            ).strip()
-
-            name = r.get(
-                "bdmc", ""
+            code = str(r.get('bddm', '')).strip()
+            name = str(r.get('bdmc', ''))
+            call, put, total = (
+                number(r.get(k))
+                for k in ('rccjl', 'rpcjl', 'cjl')
             )
 
-            call = to_number(
-                r.get("rccjl")
-            )
-
-            put = to_number(
-                r.get("rpcjl")
-            )
-
-            total = to_number(
-                r.get("cjl")
-            )
-
-        if not (
-            code.isdigit()
-            and len(code) == 6
-        ):
+        if not (code.isdigit() and len(code) == 6):
             continue
 
         if (
-            call is None
-            or put is None
-            or total is None
+            any(v is None for v in (call, put, total))
+            or call <= 0 or put < 0 or total <= 0
         ):
             continue
 
-        if (
-            call <= 0
-            or put < 0
-            or total <= 0
-        ):
+        if abs(call + put - total) > max(3, total * .02):
             continue
 
-        if abs(call + put - total) > max(
-            3, total * 0.02
-        ):
-            continue
-
-        products.append({
-            "exchange": exchange,
-            "code": code,
-            "name": str(name),
-            "call_volume": int(call),
-            "put_volume": int(put),
-            "total_volume": int(total)
+        parsed.append({
+            'exchange': exchange,
+            'code': code,
+            'name': name,
+            'call_volume': int(call),
+            'put_volume': int(put),
+            'total_volume': int(total)
         })
 
-    return products
+    return parsed
 
 
-def fetch_sse(session, day):
-    params = {
-        "isPagination": "false",
-        "sqlId": (
-            "COMMON_SSE_ZQPZ_YSP_QQ_"
-            "SJTJ_MRTJ_CX"
-        ),
-        "tradeDate": day.replace("-", "")
-    }
+def fetch(session, url, params, headers, day, exchange):
+    error = None
 
-    errors = []
-
-    for url in SSE_URLS:
+    for attempt in range(2):
         try:
             response = session.get(
                 url,
                 params=params,
-                timeout=12,
-                headers={
-                    "Referer": (
-                        "https://www.sse.com.cn/"
-                    ),
-                    "User-Agent": "Mozilla/5.0"
-                }
+                headers=headers,
+                timeout=(8, 18)
             )
-
             response.raise_for_status()
-
             body = response.json()
 
-            products = parse_rows(
-                body.get("result", []),
-                "SSE"
+            rows = (
+                body.get('result', [])
+                if exchange == 'SSE'
+                else body[0].get('data', [])
             )
 
-            if len(products) < 4:
-                raise ValueError(
-                    "Too few SSE ETF products"
-                )
+            products = parse(rows, exchange, day)
 
+            if len(products) < (
+                4 if exchange == 'SSE' else 3
+            ):
+                raise ValueError(
+                    f'Incomplete {exchange} records: '
+                    f'{len(products)}'
+                )
             return products
 
         except (
             requests.RequestException,
-            ValueError,
-            TypeError
+            ValueError, KeyError,
+            TypeError, IndexError
         ) as exc:
-            errors.append(str(exc)[:120])
+            error = exc
+            if attempt == 0:
+                time.sleep(1.5)
 
     raise RuntimeError(
-        "SSE API failed: "
-        + " | ".join(errors)
+        f'{exchange} {day} unavailable: '
+        f'{type(error).__name__}: '
+        f'{str(error)[:100]}'
     )
 
 
-def fetch_szse(session, day):
-    response = session.get(
-        SZSE_URL,
-        params={
-            "SHOWTYPE": "JSON",
-            "CATALOGID": "ysprdzb",
-            "TABKEY": "tab1",
-            "txtQueryDate": day
+def collect(session, day):
+    sse = fetch(
+        session, SSE_URL, {
+            'isPagination': 'false',
+            'sqlId': 'COMMON_SSE_ZQPZ_YSP_QQ_SJTJ_MRTJ_CX',
+            'tradeDate': day.replace('-', '')
         },
-        timeout=12,
-        headers={
-            "User-Agent": "Mozilla/5.0",
-            "Referer": (
-                "https://investor.szse.cn/"
-            )
+        SSE_HEADERS, day, 'SSE'
+    )
+
+    szse = fetch(
+        session, SZSE_URL, {
+            'SHOWTYPE': 'JSON',
+            'CATALOGID': 'ysprdzb',
+            'TABKEY': 'tab1',
+            'txtQueryDate': day
+        },
+        SZSE_HEADERS, day, 'SZSE'
+    )
+
+    rows = sse + szse
+
+    calls = sum(p['call_volume'] for p in rows)
+    puts = sum(p['put_volume'] for p in rows)
+
+    if calls <= 0 or not 0.02 <= puts / calls <= 20:
+        raise ValueError(
+            f'Invalid market-wide ETF PCR {day}'
+        )
+
+    pair = [
+        p for p in rows
+        if (p['exchange'], p['code']) in {
+            ('SSE', '510300'),
+            ('SZSE', '159919')
         }
-    )
+    ]
 
-    response.raise_for_status()
-
-    body = response.json()
-
-    if (
-        not isinstance(body, list)
-        or not body
-    ):
-        raise ValueError(
-            "Invalid SZSE response"
-        )
-
-    products = parse_rows(
-        body[0].get("data", []),
-        "SZSE"
-    )
-
-    if len(products) < 3:
-        raise ValueError(
-            "Too few SZSE ETF products"
-        )
-
-    return products
-
-
-def collect_day(session, day):
-    sse = fetch_sse(session, day)
-    szse = fetch_szse(session, day)
-
-    components = sse + szse
-
-    total_calls = sum(
-        r["call_volume"]
-        for r in components
-    )
-
-    total_puts = sum(
-        r["put_volume"]
-        for r in components
-    )
-
-    if min(total_calls, total_puts) <= 0:
-        raise ValueError(
-            "Missing call/put volume"
-        )
-
-    weighted_pcr = (
-        total_puts / total_calls
-    )
-
-    if not 0.02 <= weighted_pcr <= 20:
-        raise ValueError(
-            "Implausible PCR value"
-        )
+    pcr300 = (
+        sum(x['put_volume'] for x in pair) /
+        sum(x['call_volume'] for x in pair)
+    ) if len(pair) == 2 else None
 
     return {
-        "date": day,
-        "weighted_pcr": round(
-            weighted_pcr, 6
+        'date': day,
+        'weighted_pcr': round(puts / calls, 7),
+        'pcr_300etf': (
+            round(pcr300, 7)
+            if pcr300 is not None
+            else None
         ),
-        "call_volume": total_calls,
-        "put_volume": total_puts,
-        "sse_products": len(sse),
-        "szse_products": len(szse),
-        "components": components,
-        "scope_verified": False,
-        "source": (
-            "SSE+SZSE ETF options "
-            "daily statistics"
+        'call_volume': calls,
+        'put_volume': puts,
+        'sse_products': len(sse),
+        'szse_products': len(szse),
+        'components': rows,
+        'source': (
+            'SSE+SZSE ETF daily option statistics'
         )
     }
 
 
 def main():
-    market = read_json(
-        MARKET, {}
+    now = dt.datetime.now(TZ)
+
+    target = (
+        now.date()
+        if now.hour >= 18
+        else now.date() - dt.timedelta(days=1)
     )
 
-    trading_dates = sorted({
-        r["date"]
-        for r in market.get("history", [])
-        if (
-            isinstance(r, dict)
-            and isinstance(r.get("date"), str)
+    calendar = xcals.get_calendar('XSHG')
+
+    trading = [
+        d.date().isoformat()
+        for d in calendar.sessions_in_range(
+            pd.Timestamp(
+                target - dt.timedelta(days=430)
+            ),
+            pd.Timestamp(target)
         )
-    })
+    ][-252:]
 
-    if not trading_dates:
-        raise RuntimeError(
-            "No verified market trading dates"
-        )
+    expected = trading[-1]
+    allowed = set(trading)
 
-    # 回补最近35个已知交易日
-    requested = trading_dates[-35:]
+    old_cache = load(CACHE, {}).get('days', {})
+    old_history = load(OUTPUT, {}).get('history', [])
 
-    old = read_json(
-        CACHE, {}
-    ).get("days", {})
-
-    collected = {
-        day: old[day]
-        for day in requested
-        if day in old
+    merged = {
+        **{
+            r['date']: r
+            for r in old_history
+            if (
+                isinstance(r, dict)
+                and r.get('date') in allowed
+            )
+        },
+        **{
+            d: r
+            for d, r in old_cache.items()
+            if (
+                d in allowed
+                and isinstance(r, dict)
+            )
+        }
     }
 
-    failures = 0
+    missing = [
+        d for d in reversed(trading)
+        if d not in merged
+    ]
+
+    attempted = 0
+    successes = 0
+    failed_in_row = 0
 
     with requests.Session() as session:
-        for day in reversed(requested):
-            if day in collected:
-                failures = 0
-                continue
+        for day in missing[:MAX_NEW_PER_RUN]:
+            attempted += 1
 
             try:
-                record = collect_day(
-                    session, day
-                )
-
-                collected[day] = record
-                failures = 0
+                record = collect(session, day)
+                merged[day] = record
+                successes += 1
+                failed_in_row = 0
 
                 print(
-                    "ETF_PCR_OK",
+                    'PCR_OK',
                     day,
-                    "PCR=",
-                    record["weighted_pcr"],
-                    "SSE=",
-                    record["sse_products"],
-                    "SZSE=",
-                    record["szse_products"],
+                    'ETF=', record['weighted_pcr'],
+                    '300ETF=', record['pcr_300etf'],
                     flush=True
                 )
 
             except Exception as exc:
-                failures += 1
+                failed_in_row += 1
 
                 print(
-                    "ETF_PCR_UNAVAILABLE",
+                    '::warning::PCR_MISSING',
                     day,
-                    type(exc).__name__,
-                    str(exc)[:200],
+                    str(exc)[:260],
                     flush=True
                 )
 
-                if failures >= 3:
+                if failed_in_row >= 5:
                     print(
-                        "Stopping after repeated "
-                        "provider failures",
+                        '::warning::Many provider failures; '
+                        'stop this run to avoid rate limiting',
                         flush=True
                     )
                     break
 
-            time.sleep(0.35)
+            time.sleep(.65)
 
-    save_json(
+    save(
         CACHE,
-        {"days": collected}
+        {
+            'days': {
+                d: merged[d]
+                for d in sorted(merged)
+            }
+        }
     )
 
-    if not collected:
+    history = [
+        merged[d]
+        for d in trading
+        if d in merged
+    ]
+
+    if not history:
         raise RuntimeError(
-            "No real ETF PCR collected. "
-            "Existing published data unchanged."
+            'No verified options statistics: '
+            'leaving existing data unchanged'
         )
 
-    latest_date = max(collected)
+    asof = history[-1]['date']
 
-    # 保证用于均值计算的是连续交易日
-    position = requested.index(
-        latest_date
-    )
-
-    history = []
-
-    for day in reversed(
-        requested[:position + 1]
-    ):
-        if day not in collected:
-            break
-
-        history.append(
-            collected[day]
-        )
-
-    history.reverse()
-
-    payload = {
-        "source": (
-            "SSE+SZSE ETF options only; "
-            "CFFEX and commodity options "
-            "not included"
-        ),
-        "scope": (
-            "沪深ETF期权，"
-            "不是全市场期权"
-        ),
-        "scope_verified": False,
-        "asof": latest_date,
-        "updated_at": (
-            dt.datetime.now(
+    save(
+        OUTPUT,
+        {
+            'source': (
+                'SSE+SZSE ETF options '
+                '(not CFFEX or commodity options)'
+            ),
+            'scope': (
+                '沪深ETF期权（不含股指、商品期权）'
+            ),
+            'weight_method': (
+                'sum(put volume) / sum(call volume)'
+            ),
+            'asof': asof,
+            'expected_session': expected,
+            'updated_at': dt.datetime.now(
                 dt.timezone.utc
-            ).isoformat()
-        ),
-        "weight_method": (
-            "Sum put volume / "
-            "sum call volume"
-        ),
-        "history": history
-    }
-
-    save_json(
-        OUTPUT, payload
+            ).isoformat(),
+            'history': history,
+            'missing_sessions': [
+                d for d in trading
+                if d not in merged
+            ],
+            'available_sessions': len(history),
+            'target_sessions': len(trading)
+        }
     )
 
     print(
-        "ETF_PCR_PUBLISHED",
-        "date=", latest_date,
-        "consecutive_sessions=",
-        len(history),
-        "PCR=",
-        history[-1]["weighted_pcr"],
+        'PCR_PUBLISHED',
+        'asof=', asof,
+        'expected=', expected,
+        'available=', len(history),
+        '/', len(trading),
+        'new=', successes,
+        'attempted=', attempted,
         flush=True
     )
 
-    if len(history) < 20:
+    if asof != expected:
         print(
-            "WARNING: fewer than 20 "
-            "consecutive sessions; "
-            "standard deviation unavailable",
+            '::warning::PCR_STALE: '
+            'target trading date not yet available:',
+            expected,
             flush=True
         )
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
