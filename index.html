@@ -2,48 +2,62 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>A股市场择时仪表盘 Pro V7</title>
+<title>A股市场择时仪表盘 Pro V8</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
 <style>
 :root {
   color-scheme:dark;
   --bg:#091321;
-  --panel:#14243a;
-  --border:#29405e;
-  --text:#edf5ff;
-  --muted:#a5b9d3;
-  --gold:#ffc76b;
-  --green:#44dba5;
-  --blue:#7fb8ff;
-  --purple:#c5a4ff;
-  --red:#f68c96;
+  --card:#14243a;
+  --line:#30435d;
+  --txt:#edf5ff;
+  --muted:#a6bad2;
+  --green:#48deb0;
+  --blue:#85baff;
+  --gold:#ffd082;
+  --purple:#c8a7ff;
+  --red:#ff8992;
 }
 * {box-sizing:border-box}
 body {
-  margin:0;background:var(--bg);color:var(--text);
-  font:14px/1.65 system-ui,"Microsoft Yahei",sans-serif;
+  margin:0;
+  background:var(--bg);
+  color:var(--txt);
+  font:14px/1.65 system-ui,'Microsoft Yahei',sans-serif;
 }
-main {max-width:1420px;margin:auto;padding:26px 20px 60px}
-header,.between {
-  display:flex;justify-content:space-between;
-  align-items:center;gap:14px;flex-wrap:wrap;
+main {
+  max-width:1440px;
+  margin:auto;
+  padding:26px 20px 55px;
 }
 h1 {font-size:27px;margin:0}
 h2 {font-size:18px;margin:0 0 10px}
-h3 {font-size:15px;margin:0 0 7px}
+h3 {font-size:15px;margin:0 0 8px}
 p {margin:7px 0}
-.muted {color:var(--muted)}
-.small {font-size:12px;color:var(--muted)}
+.muted,.small {color:var(--muted)}
+.small {font-size:12px}
+.between {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+}
 .chip {
-  border:1px solid #3b5877;
-  background:#1d344e;border-radius:30px;
-  padding:6px 12px;font-size:12px;
+  background:#20334b;
+  border:1px solid #3a5775;
+  border-radius:99px;
+  padding:6px 11px;
+  font-size:12px;
 }
 .notice {
-  padding:12px 16px;border:1px solid #3e5874;
-  background:#1d3148;border-radius:11px;margin:19px 0;
+  padding:13px 15px;
+  background:#1b3148;
+  border:1px solid #385575;
+  border-radius:11px;
+  margin:18px 0;
 }
 .grid {
   display:grid;
@@ -51,197 +65,248 @@ p {margin:7px 0}
   gap:14px;
 }
 .card {
-  background:var(--panel);border:1px solid var(--border);
-  padding:19px;border-radius:15px;min-width:0;
+  min-width:0;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:19px;
 }
 .half {grid-column:span 2}
-.wide {grid-column:1/-1}
+.full {grid-column:1/-1}
 .metric {
-  font-size:34px;font-weight:750;
-  line-height:1.3;margin:8px 0;
+  font-size:34px;
+  font-weight:750;
+  line-height:1.3;
+  margin:8px 0;
 }
-.gold {color:var(--gold)}
 .green {color:var(--green)}
 .blue {color:var(--blue)}
+.gold {color:var(--gold)}
 .purple {color:var(--purple)}
-.chart {height:320px;position:relative;margin-top:12px}
-.toolbar {
-  display:flex;gap:7px;flex-wrap:wrap;align-items:center;
+.red {color:var(--red)}
+.chart {
+  height:330px;
+  position:relative;
+  margin-top:13px;
+}
+.buttons {
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
 }
 button {
-  cursor:pointer;color:#eef6ff;background:#234564;
-  border:1px solid #456588;padding:7px 12px;
-  border-radius:8px;font:inherit;
+  cursor:pointer;
+  padding:7px 12px;
+  border-radius:8px;
+  border:1px solid #45678b;
+  background:#234665;
+  color:var(--txt);
 }
 button.active {
-  background:#245e60;border-color:var(--green);
+  border-color:var(--green);
+  background:#225a5d;
 }
 .report {
-  border:1px solid #34516e;background:#112238;
-  border-radius:11px;padding:15px 17px;margin-top:12px;
+  padding:14px 17px;
+  background:#102239;
+  border:1px solid #304b69;
+  border-radius:10px;
+  margin:11px 0;
 }
-.report p {color:#cedbec}
-table {width:100%;border-collapse:collapse}
-td,th {
-  padding:9px 6px;text-align:left;
-  border-bottom:1px solid var(--border);
+.report p {color:#cbdbef}
+table {
+  width:100%;
+  border-collapse:collapse;
+}
+th,td {
+  padding:9px 6px;
+  border-bottom:1px solid var(--line);
+  text-align:left;
 }
 th {color:var(--muted)}
 footer {
-  margin-top:25px;border-top:1px solid var(--border);
-  padding-top:14px;color:var(--muted);font-size:12px;
+  margin-top:25px;
+  padding-top:15px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:12px;
 }
-@media(max-width:900px) {
+@media(max-width:920px) {
   .grid {grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(max-width:650px) {
+@media(max-width:620px) {
   main {padding:15px 11px}
   .grid {grid-template-columns:1fr}
   .half {grid-column:span 1}
-  .chart {height:280px}
-  h1 {font-size:23px}
+  .chart {height:260px}
   .metric {font-size:29px}
+  h1 {font-size:23px}
 }
 </style>
 </head>
 <body>
 <main>
 
-<header>
+<header class="between">
   <div>
-    <h1>A股市场择时仪表盘 Pro V7</h1>
+    <h1>A股市场择时仪表盘 Pro V8</h1>
     <div class="muted">
-      全A股SMA20/SMA60 · TRIN ·
+      沪深京全A股市场宽度 · TRIN ·
       沪深ETF期权PCR · 沪深300指数
     </div>
   </div>
   <div>
-    <span id="marketStatus" class="chip">加载中</span>
-    <span id="marketDate" class="chip">—</span>
+    <span class="chip" id="status">读取中</span>
+    <span class="chip" id="asof">—</span>
   </div>
 </header>
 
-<div id="notice" class="notice">
-  正在读取真实行情……
+<div class="notice" id="notice">
+  正在读取三组独立的真实盘后数据……
 </div>
 
 <section class="grid">
 
 <div class="card">
-  <div class="muted">全A股 SMA20 市场宽度</div>
-  <div id="b20" class="metric green">—</div>
-  <div id="b20desc" class="small">—</div>
+  <div class="muted">SMA20全A股市场宽度</div>
+  <div class="metric green" id="b20">—</div>
+  <div class="small" id="b20Info">—</div>
 </div>
 
 <div class="card">
-  <div class="muted">全A股 SMA60 市场宽度</div>
-  <div id="b60" class="metric blue">—</div>
-  <div id="b60desc" class="small">—</div>
+  <div class="muted">SMA60全A股市场宽度</div>
+  <div class="metric blue" id="b60">—</div>
+  <div class="small" id="b60Info">—</div>
 </div>
 
 <div class="card">
-  <div class="muted">成交量 TRIN</div>
-  <div id="trin" class="metric gold">—</div>
-  <div class="small">
-    上涨家数×下跌成交量 /
-    (下跌家数×上涨成交量)
+  <div class="muted">阿姆斯指数TRIN（成交量）</div>
+  <div class="metric gold" id="trin">—</div>
+  <div class="small" id="trinInfo">—</div>
+</div>
+
+<div class="card">
+  <div class="muted">沪深300最新收盘指数</div>
+  <div class="metric blue" id="indexClose">—</div>
+  <div class="small" id="indexDate">—</div>
+</div>
+
+<div class="card half">
+  <h2>SMA20 / SMA60历史宽度</h2>
+  <div class="chart">
+    <canvas id="breadthChart"></canvas>
   </div>
 </div>
 
-<div class="card">
-  <div class="muted">沪深300指数 · 最新收盘</div>
-  <div id="hsClose" class="metric blue">—</div>
-  <div id="hsDate" class="small">—</div>
-</div>
-
 <div class="card half">
-  <h2>SMA20 / SMA60 历史宽度</h2>
-  <div class="chart"><canvas id="breadthChart"></canvas></div>
+  <h2>成交量TRIN / 五日均线 / 成交额TRIN</h2>
+  <div class="chart">
+    <canvas id="trinChart"></canvas>
+  </div>
 </div>
 
-<div class="card half">
-  <h2>TRIN历史趋势</h2>
-  <div class="chart"><canvas id="trinChart"></canvas></div>
-</div>
-
-<div class="card wide">
+<div class="card full">
   <div class="between">
     <div>
-      <h2>期权PCR × 沪深300 同期对照</h2>
+      <h2>ETF期权PCR × 沪深300 同期对照</h2>
       <div class="small">
-        沪深交易所ETF期权成交量PCR；
-        沪深300ETF期权为上交所510300与深交所159919合并。
-        两张图使用同一批交易日。
+        两图按沪深300真实交易日共用横轴。
+        数据缺失时留空，不将10月23日PCR伪装成10月26日。
       </div>
     </div>
-    <div class="toolbar" id="periodButtons">
-      <button data-n="20">20日</button>
-      <button data-n="30" class="active">30日</button>
-      <button data-n="60">60日</button>
-      <button data-n="0">全部PCR历史</button>
-      <button id="bandsBtn">±2σ：隐藏</button>
+    <div class="buttons" id="rangeBtns">
+      <button data-days="30">1个月</button>
+      <button data-days="90" class="active">3个月</button>
+      <button data-days="180">6个月</button>
+      <button data-days="365">1年</button>
+      <button data-days="0">全部</button>
     </div>
   </div>
 </div>
 
 <div class="card">
-  <div class="muted">沪深ETF期权合并PCR</div>
-  <div class="metric gold" id="etfPcr">—</div>
-  <div class="small" id="etfDate">—</div>
+  <div class="muted">沪深ETF期权成交量PCR</div>
+  <div class="metric gold" id="pcr">—</div>
+  <div class="small" id="pcrDate">—</div>
 </div>
 
 <div class="card">
   <div class="muted">沪深300ETF期权合并PCR</div>
   <div class="metric purple" id="pcr300">—</div>
-  <div class="small" id="pcr300Date">
-    仅510300 + 159919
-  </div>
-</div>
-
-<div class="card">
-  <div class="muted">ETF PCR · 20日均值</div>
-  <div class="metric blue" id="pcrMA">—</div>
-  <div class="small">滚动20个有效、连续交易日</div>
-</div>
-
-<div class="card">
-  <div class="muted">ETF PCR · 20日标准差 / Z分数</div>
-  <div class="metric" id="pcrStd">—</div>
   <div class="small">
-    Z-Score：<span id="pcrZ">—</span>
+    上交所510300 + 深交所159919
   </div>
+</div>
+
+<div class="card">
+  <div class="muted">ETF PCR 20日均值 / 标准差</div>
+  <div class="metric blue" id="pcrMA">—</div>
+  <div class="small">
+    σ = <span id="pcrStd">—</span>，
+    须连续20个交易日
+  </div>
+</div>
+
+<div class="card">
+  <div class="muted">PCR Z分数 / 历史覆盖</div>
+  <div class="metric" id="pcrZ">—</div>
+  <div class="small" id="pcrCoverage">—</div>
 </div>
 
 <div class="card half">
   <div class="between">
-    <h2>沪深ETF期权PCR · 20日标准差带</h2>
-    <span class="chip">同一时间轴</span>
+    <h2>沪深ETF PCR + 300ETF PCR</h2>
+    <button id="bandToggle">±2σ：隐藏</button>
   </div>
-  <div class="chart"><canvas id="pcrChart"></canvas></div>
+  <div class="chart">
+    <canvas id="pcrChart"></canvas>
+  </div>
   <div class="small" id="pcrNote">
-    黄色：全ETF；紫色：两只300ETF；
-    蓝色：20日均值；绿色区域：±1σ。
+    20日均值与标准差只在连续数据有效时显示。
   </div>
 </div>
 
 <div class="card half">
-  <div class="between">
-    <h2>沪深300指数 · 同期收盘走势</h2>
-    <span id="compareRange" class="chip">30日</span>
+  <h2>沪深300指数 · 完全相同日期</h2>
+  <div class="chart">
+    <canvas id="hsChart"></canvas>
   </div>
-  <div class="chart"><canvas id="indexChart"></canvas></div>
-  <div class="small" id="indexNote">
-    交易日期与左图逐日对齐。
+  <div class="small" id="hsNote">
+    原始指数日收盘价；对应PCR无数据时不伪造。
   </div>
 </div>
 
-<div class="card wide">
+<div class="card full">
+  <h2>同期变化与相关性验证</h2>
+  <div class="between">
+    <div>
+      <div class="muted">
+        最近20组有效相邻交易日：
+        PCR日变化 vs 沪深300日收益率
+      </div>
+      <div class="metric" id="correlation">—</div>
+      <div class="small" id="corrNote">
+        至少10组相邻交易日数据后才计算Pearson相关系数。
+      </div>
+    </div>
+    <div class="small" id="dateAudit">—</div>
+  </div>
+  <div class="chart" style="height:260px">
+    <canvas id="scatterChart"></canvas>
+  </div>
+  <div class="small">
+    横轴：ETF PCR每日变化量；纵轴：沪深300当日收益率（%）。
+    相关不意味着因果，也不能直接预测指数。
+  </div>
+</div>
+
+<div class="card full">
   <h2>市场结构与期权情绪分析</h2>
   <div id="analysis"></div>
 </div>
 
 <div class="card half">
-  <h2>沪深京市场样本核验</h2>
+  <h2>三个交易所样本</h2>
   <table>
     <thead>
       <tr>
@@ -271,28 +336,24 @@ footer {
 </div>
 
 <div class="card half">
-  <h2>数据与统计口径</h2>
+  <h2>日期与来源核验</h2>
   <table>
     <tbody>
       <tr>
-        <td>A股盘后数据</td>
-        <td id="mSource">—</td>
+        <td>A股宽度/TRIN</td>
+        <td id="marketSource">—</td>
       </tr>
       <tr>
-        <td>ETF期权数据</td>
-        <td id="oSource">—</td>
+        <td>期权PCR</td>
+        <td id="optionsSource">—</td>
       </tr>
       <tr>
-        <td>沪深300数据</td>
-        <td id="iSource">—</td>
+        <td>沪深300指数</td>
+        <td id="indexSource">—</td>
       </tr>
       <tr>
-        <td>沪深300ETF期权样本</td>
-        <td>510300 + 159919</td>
-      </tr>
-      <tr>
-        <td>合并PCR公式</td>
-        <td>认沽成交量之和 ÷ 认购成交量之和</td>
+        <td>1年数据覆盖</td>
+        <td id="oneYearCoverage">—</td>
       </tr>
     </tbody>
   </table>
@@ -301,718 +362,793 @@ footer {
 </section>
 
 <footer>
-  本网站展示真实来源记录，不生成模拟行情。
-  沪深ETF期权PCR不等于整个中国期权市场PCR，
-  不包含中金所及商品期权。
-  现有标准差以沪深ETF合并PCR计算。
-  数据不构成投资建议。
+本站为静态网页，刷新只读取已发布的JSON。
+仅沪深ETF期权成交量PCR，非整个中国期权市场；
+未纳入中金所及商品期权。
+标准差使用20日总体标准差。
+指标研究用途，不构成投资建议。
 </footer>
 
 </main>
 
 <script>
-"use strict";
+'use strict';
 
 const $ = id => document.getElementById(id);
 
-const ok = x =>
-  typeof x === "number" && Number.isFinite(x);
+const good = x =>
+  typeof x === 'number' && Number.isFinite(x);
 
-const num = (x,n=2) =>
-  ok(x) ? x.toFixed(n) : "—";
+const fmt = (x,n=2) =>
+  good(x) ? x.toFixed(n) : '—';
 
-const txt = (id,v) => {
+const put = (id,v) => {
   $(id).textContent = String(v);
 };
 
-const fmtCount = x =>
-  ok(x) ? x.toLocaleString("zh-CN") : "—";
+const amount = x =>
+  good(x) ? x.toLocaleString('zh-CN') : '—';
 
-let markets = [];
-let options = [];
-let indices = [];
-let optMeta = {};
-let mMeta = {};
-let iMeta = {};
+const rec = o =>
+  Array.isArray(o?.history)
+    ? o.history
+    : Array.isArray(o) ? o : [];
+
+const uniq = a => [
+  ...new Map(
+    a.filter(r =>
+      /^\d{4}-\d{2}-\d{2}$/.test(r?.date || '')
+    ).map(r => [r.date,r])
+  ).values()
+].sort((a,b) => a.date.localeCompare(b.date));
+
+let market = [];
+let idx = [];
+let pcr = [];
 let charts = {};
-
-let shownDays = 30;
+let rangeDays = 90;
 let show2 = false;
+let meta = {};
 
-function destroy(id) {
-  if (charts[id]) {
-    charts[id].destroy();
-    delete charts[id];
-  }
-}
+const line = (label,data,color,extra={}) => ({
+  label,
+  data,
+  borderColor:color,
+  backgroundColor:color,
+  borderWidth:2,
+  pointRadius:0,
+  tension:.12,
+  spanGaps:false,
+  ...extra
+});
 
-async function getJSON(file) {
-  try {
-    const r = await fetch(
-      "./data/" + file + "?v=" + Date.now(),
-      {cache:"no-store"}
-    );
+function chart(
+  id,labels,datasets,
+  {min,max,scatter=false}={}
+) {
+  if (charts[id]) charts[id].destroy();
 
-    if (!r.ok) return null;
-    return await r.json();
-
-  } catch(e) {
-    return null;
-  }
-}
-
-const records = d =>
-  Array.isArray(d?.history) ? d.history :
-  Array.isArray(d?.data) ? d.data :
-  Array.isArray(d) ? d : [];
-
-function sorted(rows) {
-  return rows
-    .filter(r =>
-      /^\d{4}-\d{2}-\d{2}$/.test(r?.date || "")
-    )
-    .sort((a,b) => a.date.localeCompare(b.date));
-}
-
-function unique(list) {
-  const mp = new Map();
-
-  for (const r of list) {
-    mp.set(r.date,r);
-  }
-
-  return [...mp.values()].sort(
-    (a,b) => a.date.localeCompare(b.date)
-  );
-}
-
-function valLine(label,data,color,extra={}) {
-  return {
-    label,data,
-    borderColor:color,
-    backgroundColor:color,
-    borderWidth:2,
-    pointRadius:0,
-    pointHoverRadius:4,
-    tension:0.14,
-    spanGaps:false,
-    ...extra
-  };
-}
-
-function graph(id,labels,datasets,ax={}) {
-  destroy(id);
-
-  if (!labels.length || typeof Chart === "undefined") {
+  if (!labels.length || typeof Chart === 'undefined') {
     return;
   }
 
   charts[id] = new Chart($(id),{
-    type:"line",
+    type:scatter ? 'scatter' : 'line',
     data:{labels,datasets},
     options:{
       responsive:true,
       maintainAspectRatio:false,
       interaction:{
-        mode:"index",
-        intersect:false
+        intersect:false,
+        mode:scatter ? 'nearest' : 'index'
       },
       plugins:{
         legend:{
           labels:{
-            color:"#d0dded",
+            color:'#b8cce8',
             boxWidth:12,
             font:{size:11}
           }
-        },
-        tooltip:{
-          mode:"index",
-          intersect:false
         }
       },
       scales:{
         x:{
+          type:scatter ? 'linear' : 'category',
           ticks:{
-            color:"#a5b9d3",
-            maxTicksLimit:6,
+            color:'#a6bad2',
+            maxTicksLimit:7,
             maxRotation:0
           },
-          grid:{color:"rgba(120,155,200,.06)"}
+          grid:{
+            color:'rgba(120,160,200,.07)'
+          },
+          title:scatter ? {
+            display:true,
+            text:'PCR日变化量',
+            color:'#a6bad2'
+          } : undefined
         },
         y:{
-          ...ax,
+          min,max,
           ticks:{
-            color:"#a5b9d3",
+            color:'#a6bad2',
             maxTicksLimit:6
           },
-          grid:{color:"rgba(120,155,200,.12)"}
+          grid:{
+            color:'rgba(120,160,200,.13)'
+          },
+          title:scatter ? {
+            display:true,
+            text:'指数日收益率（%）',
+            color:'#a6bad2'
+          } : undefined
         }
       }
     }
   });
 }
 
-function getOptionRow(r) {
-  if (!Array.isArray(r?.components)) return null;
-
-  const valid = r.components.filter(c =>
-    ok(Number(c.call_volume)) &&
-    ok(Number(c.put_volume)) &&
-    Number(c.call_volume) > 0 &&
-    Number(c.put_volume) >= 0
-  );
-
-  const calls = valid.reduce(
-    (s,c) => s + Number(c.call_volume),0
-  );
-
-  const puts = valid.reduce(
-    (s,c) => s + Number(c.put_volume),0
-  );
-
-  const a = valid.find(c =>
-    c.code === "510300" &&
-    c.exchange === "SSE"
-  );
-
-  const b = valid.find(c =>
-    c.code === "159919" &&
-    c.exchange === "SZSE"
-  );
-
-  let p300 = null;
-  let pSH = null;
-  let pSZ = null;
-
-  if (a && b) {
-    pSH = Number(a.put_volume) /
-          Number(a.call_volume);
-
-    pSZ = Number(b.put_volume) /
-          Number(b.call_volume);
-
-    p300 = (
-      Number(a.put_volume) +
-      Number(b.put_volume)
-    ) / (
-      Number(a.call_volume) +
-      Number(b.call_volume)
+async function fetchJSON(file) {
+  try {
+    const r = await fetch(
+      './data/' + file + '?t=' + Date.now(),
+      {cache:'no-store'}
     );
+    return r.ok ? await r.json() : null;
+  } catch {
+    return null;
   }
+}
+
+function optionPoint(r) {
+  if (!r?.date) return null;
+
+  const c = Array.isArray(r.components)
+    ? r.components : [];
+
+  const pieces = c.filter(p =>
+    good(+p.call_volume) &&
+    good(+p.put_volume) &&
+    +p.call_volume > 0 &&
+    +p.put_volume >= 0
+  );
+
+  const ca = pieces.reduce(
+    (s,x) => s + (+x.call_volume),0
+  );
+
+  const pu = pieces.reduce(
+    (s,x) => s + (+x.put_volume),0
+  );
+
+  const overall = ca > 0
+    ? pu/ca
+    : good(r.weighted_pcr)
+      ? r.weighted_pcr : null;
+
+  const a = pieces.find(x =>
+    x.exchange === 'SSE' &&
+    String(x.code) === '510300'
+  );
+
+  const b = pieces.find(x =>
+    x.exchange === 'SZSE' &&
+    String(x.code) === '159919'
+  );
+
+  const c300 = a && b
+    ? (+a.put_volume + +b.put_volume) /
+      (+a.call_volume + +b.call_volume)
+    : good(r.pcr_300etf)
+      ? r.pcr_300etf : null;
 
   return {
     date:r.date,
-    etf:calls > 0 ? puts/calls : null,
-    p300,pSH,pSZ,
-    componentsCount:valid.length
+    overall,
+    c300
   };
 }
 
-function rollField(field) {
-  const mDates = markets.map(r => r.date);
-  const mSet = new Set(mDates);
+function pearson(x,y) {
+  if (x.length < 10) return null;
 
-  const oMap = new Map(
-    options.map(r => [r.date,r])
-  );
+  const n = x.length;
+  const mx = x.reduce((s,v) => s+v,0)/n;
+  const my = y.reduce((s,v) => s+v,0)/n;
 
-  return options.map(r => {
-    if (!mSet.has(r.date)) {
-      return {mean:null,std:null};
-    }
+  let cov=0,vx=0,vy=0;
 
-    const end = mDates.indexOf(r.date);
+  for (let i=0;i<n;i++) {
+    const a=x[i]-mx;
+    const b=y[i]-my;
+    cov+=a*b;
+    vx+=a*a;
+    vy+=b*b;
+  }
 
-    if (end < 19) {
-      return {mean:null,std:null};
-    }
-
-    const days = mDates.slice(
-      end-19,end+1
-    );
-
-    const arr = days.map(
-      d => oMap.get(d)?.[field]
-    );
-
-    if (!arr.every(ok)) {
-      return {mean:null,std:null};
-    }
-
-    const mean =
-      arr.reduce((a,b) => a+b,0)/20;
-
-    const std = Math.sqrt(
-      arr.reduce(
-        (a,b) => a+(b-mean)**2,0
-      )/20
-    );
-
-    return {mean,std};
-  });
+  return vx>0 && vy>0
+    ? cov/Math.sqrt(vx*vy)
+    : null;
 }
 
-function seriesChartDefaults() {
-  const lab = markets.map(r => r.date);
+function baseDates() {
+  return idx.length
+    ? idx.map(r=>r.date)
+    : market.map(r=>r.date);
+}
 
-  const a = markets.map(
-    r => r.breadth20 ?? r.breadth ?? null
+function lastDate(r) {
+  return r.length ? r[r.length-1].date : null;
+}
+
+function statWindow(dates,pMap,at) {
+  if (at<19) return null;
+
+  const arr = dates.slice(at-19,at+1)
+    .map(d => pMap.get(d)?.overall);
+
+  if (!arr.every(good)) return null;
+
+  const avg = arr.reduce((s,x)=>s+x,0)/20;
+  const std = Math.sqrt(
+    arr.reduce((s,x)=>s+(x-avg)**2,0)/20
   );
 
-  const b = markets.map(
-    r => r.breadth60 ?? null
+  return {mean:avg,std};
+}
+
+function latestStats() {
+  const dates=baseDates();
+  const map=new Map(
+    pcr.map(r=>[r.date,r])
+  );
+  const day=lastDate(pcr);
+  const i=dates.indexOf(day);
+
+  return i>=0
+    ? statWindow(dates,map,i)
+    : null;
+}
+
+function pairedChanges() {
+  const dates=baseDates();
+
+  const pMap=new Map(
+    pcr.map(r=>[r.date,r])
   );
 
-  graph("breadthChart",lab,[
-    valLine("SMA20",a,"#44dba5"),
-    valLine("SMA60",b,"#7fb8ff")
-  ],{min:0,max:100});
-
-  const t = markets.map(
-    r => r.trin ?? null
+  const iMap=new Map(
+    idx.map(r=>[r.date,r.close])
   );
 
-  const t5 = t.map((_,i) => {
+  const pairs=[];
+
+  for (let i=1;i<dates.length;i++) {
+    const t=dates[i];
+    const prev=dates[i-1];
+
+    const a=pMap.get(t)?.overall;
+    const b=pMap.get(prev)?.overall;
+
+    const c=iMap.get(t);
+    const d=iMap.get(prev);
+
     if (
-      i < 4 ||
-      !t.slice(i-4,i+1).every(ok)
-    ) return null;
+      [a,b,c,d].every(good) &&
+      d>0
+    ) {
+      pairs.push({
+        date:t,
+        x:a-b,
+        y:100*(c/d-1)
+      });
+    }
+  }
 
-    return t.slice(i-4,i+1).reduce(
-      (x,y) => x+y,0
-    )/5;
+  return pairs;
+}
+
+function renderCards() {
+  const m=market.at(-1);
+  const i=idx.at(-1);
+  const p=pcr.at(-1);
+  const s=latestStats();
+
+  put(
+    'status',
+    m ? 'A股真实历史' : 'A股数据缺失'
+  );
+
+  put('asof','A股 '+(m?.date||'—'));
+
+  put(
+    'notice',
+    `独立日期：A股 ${m?.date||'—'} ｜ ` +
+    `沪深300 ${i?.date||'—'} ｜ ` +
+    `ETF期权PCR ${p?.date||'—'}。` +
+    '缺失日期不会套用上一交易日的数据。'
+  );
+
+  const b20=m?.breadth20??m?.breadth;
+
+  put(
+    'b20',
+    good(b20) ? fmt(b20,1)+'%' : '—'
+  );
+
+  put(
+    'b60',
+    good(m?.breadth60)
+      ? fmt(m.breadth60,1)+'%' : '—'
+  );
+
+  put('trin',fmt(m?.trin));
+
+  put(
+    'b20Info',
+    good(m?.sma20?.coverage_pct)
+      ? '覆盖率 '+fmt(m.sma20.coverage_pct,1)+'%'
+      : '数据不足'
+  );
+
+  put(
+    'b60Info',
+    good(m?.sma60?.coverage_pct)
+      ? '覆盖率 '+fmt(m.sma60.coverage_pct,1)+'%'
+      : '数据不足'
+  );
+
+  put('trinInfo','数据日 '+(m?.date||'—'));
+
+  put('indexClose',fmt(i?.close));
+  put('indexDate','数据日 '+(i?.date||'—'));
+
+  put('pcr',fmt(p?.overall));
+  put(
+    'pcrDate',
+    '最新有效交易日 '+(p?.date||'—')
+  );
+
+  put('pcr300',fmt(p?.c300));
+  put('pcrMA',fmt(s?.mean));
+  put('pcrStd',fmt(s?.std));
+
+  put(
+    'pcrZ',
+    good(s?.std) && s.std>0
+      ? fmt((p.overall-s.mean)/s.std)
+      : '—'
+  );
+
+  for (const e of ['sh','sz','bj']) {
+    put(
+      e+'N',
+      amount(m?.exchange_stats?.[e]?.active)
+    );
+    put(
+      e+'ST',
+      amount(m?.exchange_stats?.[e]?.st)
+    );
+  }
+
+  put('marketSource',m?.date||'—');
+
+  put(
+    'optionsSource',
+    `${meta.o?.asof||p?.date||'—'} ｜ ` +
+    `${meta.o?.source||'未接入'}`
+  );
+
+  put(
+    'indexSource',
+    `${i?.date||'—'} ｜ ` +
+    `${meta.i?.source||'未接入'}`
+  );
+
+  const end=lastDate(idx)||lastDate(market);
+
+  const start=end
+    ? new Date(
+        Date.parse(end+'T00:00:00Z')-
+        365*86400000
+      ).toISOString().slice(0,10)
+    : '9999';
+
+  const covered=pcr.filter(r =>
+    r.date>=start && r.date<=end
+  ).length;
+
+  put(
+    'oneYearCoverage',
+    `${covered} 个PCR交易日 / ` +
+    '最多约250日（缺失不补值）'
+  );
+
+  const pdate=p?.date;
+  const expected=baseDates().at(-1);
+
+  put(
+    'pcrCoverage',
+    pdate && expected && pdate<expected
+      ? `PCR最后日期${pdate}，` +
+        `最新交易日${expected}尚缺`
+      : `历史有效记录 ${pcr.length} 日`
+  );
+}
+
+function renderTrends() {
+  if (!market.length) return;
+
+  const dates=market.map(r=>r.date);
+
+  const b20=market.map(r=>
+    r.breadth20??r.breadth??null
+  );
+
+  const b60=market.map(r=>
+    r.breadth60??null
+  );
+
+  chart(
+    'breadthChart',
+    dates,
+    [
+      line('SMA20',b20,'#48deb0'),
+      line('SMA60',b60,'#85baff')
+    ],
+    {min:0,max:100}
+  );
+
+  const t=market.map(r=>r.trin??null);
+
+  const ma=t.map((_,i) =>
+    i>=4 &&
+    t.slice(i-4,i+1).every(good)
+      ? t.slice(i-4,i+1)
+        .reduce((s,x)=>s+x,0)/5
+      : null
+  );
+
+  chart(
+    'trinChart',
+    dates,
+    [
+      line('成交量TRIN',t,'#ffd082'),
+      line('TRIN 5日均值',ma,'#85baff'),
+      line(
+        '成交额TRIN',
+        market.map(
+          r=>r.trin_amount??null
+        ),
+        '#c8a7ff'
+      )
+    ]
+  );
+}
+
+function renderCompare() {
+  const full=baseDates();
+  if (!full.length) return;
+
+  const end=lastDate(idx)||lastDate(market);
+
+  const start=rangeDays
+    ? new Date(
+        Date.parse(end+'T00:00:00Z')-
+        rangeDays*86400000
+      ).toISOString().slice(0,10)
+    : '0000';
+
+  const dates=full.filter(d=>d>=start);
+
+  const pMap=new Map(
+    pcr.map(r=>[r.date,r])
+  );
+
+  const iMap=new Map(
+    idx.map(r=>[r.date,r.close])
+  );
+
+  const mean=dates.map(d=>{
+    const at=full.indexOf(d);
+    return statWindow(full,pMap,at)?.mean??null;
   });
 
-  graph("trinChart",lab,[
-    valLine("TRIN",t,"#ffc76b"),
-    valLine("TRIN五日均值",t5,"#7fb8ff"),
-    valLine(
-      "成交额TRIN",
-      markets.map(
-        r => r.trin_amount ?? null
-      ),
-      "#c5a4ff"
-    )
-  ]);
-}
+  const std=dates.map(d=>{
+    const at=full.indexOf(d);
+    return statWindow(full,pMap,at)?.std??null;
+  });
 
-function selectedDates() {
-  // 左右两张图必须共用同一组日期
-  const source = options.length
-    ? options.map(r => r.date)
-    : indices.map(r => r.date);
-
-  return shownDays > 0
-    ? source.slice(-shownDays)
-    : source;
-}
-
-function drawCompare() {
-  const dates = selectedDates();
-
-  const optMap = new Map(
-    options.map(r => [r.date,r])
+  const band=k=>mean.map((m,i)=>
+    good(m)&&good(std[i])
+      ? Math.max(0,m+k*std[i])
+      : null
   );
 
-  const idxMap = new Map(
-    indices.map(r => [r.date,r.close])
-  );
-
-  const stats = rollField("etf");
-
-  const statMap = new Map(
-    options.map((r,i) => [r.date,stats[i]])
-  );
-
-  const mean = dates.map(
-    d => statMap.get(d)?.mean ?? null
-  );
-
-  const std = dates.map(
-    d => statMap.get(d)?.std ?? null
-  );
-
-  const band = k => mean.map(
-    (m,i) =>
-      ok(m) && ok(std[i])
-        ? Math.max(0,m+k*std[i])
-        : null
-  );
-
-  // 优先显示较清晰的 ±1σ 浅色区域
-  const layers = [
-    valLine(
-      "+1σ",
+  const series=[
+    line(
+      '+1σ',
       band(1),
-      "rgba(68,219,165,.75)",
+      'rgba(72,222,176,.65)',
       {borderWidth:1,pointRadius:0}
     ),
-    valLine(
-      "-1σ",
+    line(
+      '-1σ',
       band(-1),
-      "rgba(68,219,165,.75)",
+      'rgba(72,222,176,.65)',
       {
         borderWidth:1,
         fill:{
           target:0,
-          above:"rgba(68,219,165,.13)",
-          below:"rgba(68,219,165,.13)"
+          above:'rgba(72,222,176,.13)',
+          below:'rgba(72,222,176,.13)'
         }
       }
     )
   ];
 
   if (show2) {
-    layers.push(
-      valLine(
-        "+2σ",band(2),
-        "rgba(246,140,150,.7)",
+    series.push(
+      line(
+        '+2σ',band(2),'#ff8992',
         {borderDash:[4,4],borderWidth:1}
       ),
-      valLine(
-        "-2σ",band(-2),
-        "rgba(246,140,150,.7)",
+      line(
+        '-2σ',band(-2),'#ff8992',
         {borderDash:[4,4],borderWidth:1}
       )
     );
   }
 
-  layers.push(
-    valLine(
-      "ETF期权合并PCR",
-      dates.map(
-        d => optMap.get(d)?.etf ?? null
-      ),
-      "#ffc76b",
+  series.push(
+    line(
+      '沪深ETF PCR',
+      dates.map(d=>pMap.get(d)?.overall??null),
+      '#ffd082',
       {borderWidth:2.4}
-    )
-  );
-
-  layers.push(
-    valLine(
-      "300ETF期权合并PCR",
-      dates.map(
-        d => optMap.get(d)?.p300 ?? null
-      ),
-      "#c5a4ff",
-      {borderWidth:1.9}
-    )
-  );
-
-  layers.push(
-    valLine(
-      "20日均值",
+    ),
+    line(
+      '300ETF PCR',
+      dates.map(d=>pMap.get(d)?.c300??null),
+      '#c8a7ff',
+      {borderWidth:2}
+    ),
+    line(
+      '20日均值',
       mean,
-      "#7fb8ff",
-      {borderWidth:2.1}
+      '#85baff',
+      {borderWidth:1.8}
     )
   );
 
-  graph("pcrChart",dates,layers);
+  chart('pcrChart',dates,series);
 
-  graph("indexChart",dates,[
-    valLine(
-      "沪深300收盘点位",
-      dates.map(
-        d => idxMap.get(d) ?? null
-      ),
-      "#7fb8ff",
-      {borderWidth:2.4}
+  chart(
+    'hsChart',
+    dates,
+    [
+      line(
+        '沪深300收盘点位',
+        dates.map(d=>iMap.get(d)??null),
+        '#85baff',
+        {borderWidth:2.3}
+      )
+    ]
+  );
+
+  const shown=dates.filter(d=>
+    good(pMap.get(d)?.overall)
+  ).length;
+
+  put(
+    'pcrNote',
+    `当前范围 ${dates[0]||'—'} 至 ` +
+    `${dates.at(-1)||'—'}；` +
+    `PCR有数据 ${shown}/${dates.length} 日，` +
+    '空值不伪造。'
+  );
+
+  put(
+    'hsNote',
+    `右图与左图共用 ${dates.length} 个真实交易日；` +
+    `指数交易日 ${lastDate(idx)||'—'}，` +
+    `PCR日期 ${lastDate(pcr)||'—'}。`
+  );
+}
+
+function renderCorrelation() {
+  const pairs=pairedChanges().slice(-20);
+
+  const r=pearson(
+    pairs.map(x=>x.x),
+    pairs.map(x=>x.y)
+  );
+
+  put(
+    'correlation',
+    good(r)
+      ? (r>=0?'+':'')+fmt(r,3)
+      : '数据不足'
+  );
+
+  put(
+    'corrNote',
+    `有效相邻交易日样本 ${pairs.length}/20；` +
+    (pairs.length
+      ? '最近日期 '+pairs.at(-1).date
+      : '') +
+    '。' +
+    (
+      good(r)
+        ? Math.abs(r)<.3
+          ? '线性相关较弱'
+          : r>0
+            ? '正向同动'
+            : '反向同动'
+        : '数据不足，不能推断关联'
     )
-  ]);
-
-  txt(
-    "compareRange",
-    dates.length
-      ? dates[0]+" 至 "+dates[dates.length-1]
-      : "暂无对齐交易日"
   );
 
-  txt(
-    "pcrNote",
-    dates.length
-      ? "已显示"+dates.length+
-        "个PCR交易日；黄色为沪深ETF期权，紫色为沪深300ETF期权。"
-      : "未取得PCR日期，等待期权数据"
+  put(
+    'dateAudit',
+    `指数最新 ${lastDate(idx)||'—'} / ` +
+    `PCR最新 ${lastDate(pcr)||'—'}`
   );
 
-  txt(
-    "indexNote",
-    dates.length
-      ? "与左图使用完全相同的"+
-        dates.length+
-        "个横轴日期；右图缺失日期不填造假值。"
-      : "暂无沪深300历史数据"
+  chart(
+    'scatterChart',
+    pairs.map(x=>x.date),
+    [{
+      label:'每日配对观察',
+      data:pairs.map(x=>({
+        x:x.x,
+        y:x.y
+      })),
+      showLine:false,
+      pointRadius:4,
+      backgroundColor:'#c8a7ff',
+      borderColor:'#c8a7ff'
+    }],
+    {scatter:true}
   );
 }
 
-function report(title,parts) {
-  const root = document.createElement("div");
-  root.className = "report";
+function addReport(title,texts) {
+  const div=document.createElement('section');
+  div.className='report';
 
-  const h = document.createElement("h3");
-  h.textContent = title;
+  const h=document.createElement('h3');
+  h.textContent=title;
+  div.appendChild(h);
 
-  root.appendChild(h);
-
-  for (const t of parts) {
-    const p = document.createElement("p");
-    p.textContent = t;
-    root.appendChild(p);
+  for (const t of texts) {
+    const p=document.createElement('p');
+    p.textContent=t;
+    div.appendChild(p);
   }
 
-  $("analysis").appendChild(root);
+  $('analysis').appendChild(div);
 }
 
-function renderAnalysis() {
-  $("analysis").replaceChildren();
+function analysis() {
+  const m=market.at(-1);
+  const p=pcr.at(-1);
+  const pairs=pairedChanges().slice(-20);
 
-  const latest = markets.at(-1);
-  if (!latest) return;
+  const r=pearson(
+    pairs.map(x=>x.x),
+    pairs.map(x=>x.y)
+  );
 
-  const b20 =
-    latest.breadth20 ?? latest.breadth;
+  $('analysis').replaceChildren();
 
-  const b60 = latest.breadth60;
+  if (m) {
+    addReport('一、市场宽度与TRIN',[
+      `A股盘后日期 ${m.date}；` +
+      `SMA20 ${fmt(m.breadth20??m.breadth,1)}%，` +
+      `SMA60 ${fmt(m.breadth60,1)}%，` +
+      `TRIN ${fmt(m.trin)}。`,
 
-  const mood = ok(b20) && ok(b60)
-    ? b20 < 30 && b60 < 35
-      ? "市场整体宽度偏低，中短期结构弱势"
-      : b20 >= 60 && b60 >= 60
-        ? "多数股票站在中短期均线之上，内部参与度较好"
-        : "市场处于分化或修复阶段"
-    : "市场宽度历史不足";
-
-  report("一、市场宽度与量能",[
-    "最新A股收盘日："+latest.date+"。"+mood+"。",
-    "SMA20："+num(b20,1)+
-    "%；SMA60："+num(b60,1)+
-    "%；成交量TRIN："+num(latest.trin)+"。",
-    "TRIN反映上涨与下跌股票的相对成交量，不能当作资金净流入或直接买卖信号。"
-  ]);
-
-  const last = options.at(-1);
-  const st = rollField("etf").at(-1);
-
-  if (last) {
-    report("二、期权PCR与沪深300",[
-      "期权日期："+last.date+
-      "；沪深ETF合并PCR="+num(last.etf)+
-      "；沪深300ETF双市场合并PCR="+
-      num(last.p300)+"。",
-      "300ETF分项：上交所510300="+
-      num(last.pSH)+
-      "，深交所159919="+num(last.pSZ)+
-      "。两者按认购成交量加权，并非简单平均。",
-      "沪深ETF PCR 20日均值="+
-      num(st?.mean)+
-      "，标准差="+num(st?.std)+"。"+
-      (
-        ok(st?.std) && st.std > 0
-          ? " Z="+
-            num((last.etf-st.mean)/st.std)+"。"
-          : "20日完整历史不足时不生成Z分数。"
-      ),
-      "重要：本页只统计沪深ETF期权，不包含中金所股指期权与商品期权，不能称为全市场PCR。"
-    ]);
-  } else {
-    report("二、期权PCR",[
-      "暂无真实期权数据，暂不进行PCR情绪判断。"
+      '市场宽度低位不等于见底；' +
+      'TRIN需同时结合上涨家数、指数方向判断。'
     ]);
   }
 
-  report("三、后续观察",[
-    "比较宽度回升是否持续、TRIN与期权PCR是否同向，并核验沪深300指数趋势。",
-    "期权PCR升高或降低的含义依赖品种结构、到期周期、做市和对冲需求，±2σ属于统计偏离而非确定性转折信号。"
+  addReport('二、ETF期权PCR与指数关系',[
+    p
+      ? `最新ETF PCR ${fmt(p.overall)}；` +
+        `300ETF PCR ${fmt(p.c300)}；` +
+        `日期 ${p.date}。`
+      : '期权数据未接入。',
+
+    `最近20组日变化的Pearson r=${fmt(r,3)}` +
+    `（有效${pairs.length}组）。` +
+    '使用的是PCR逐日变化与指数每日收益率，' +
+    '不是把两个不同刻度的价格水平直接比较。',
+
+    p && lastDate(idx)>p.date
+      ? `警告：指数更新到 ${lastDate(idx)}，` +
+        `但PCR仅更新到 ${p.date}，` +
+        '后续日期缺失。'
+      : '三组数据均以各自实际日期显示。'
+  ]);
+
+  addReport('三、一年历史与风控说明',[
+    `指数历史 ${idx.length} 个交易日；` +
+    `ETF期权历史 ${pcr.length} 个有效交易日。` +
+    '选“1年”只扩大日期范围，' +
+    '不会制造缺失的PCR。',
+
+    'PCR均值与±σ要求严格连续20个指数交易日。' +
+    '相关系数是统计关联，' +
+    '不代表预测能力或交易建议。'
   ]);
 }
 
 async function load() {
-  const [m,o,h] = await Promise.all([
-    getJSON("market.json"),
-    getJSON("options_pcr.json"),
-    getJSON("hs300.json")
-  ]);
-
-  mMeta = m || {};
-  optMeta = o || {};
-  iMeta = h || {};
-
-  markets = unique(sorted(records(m)));
-
-  indices = unique(
-    sorted(
-      records(h)
-        .map(r => ({
-          ...r,
-          close:ok(r.close)
-            ? r.close
-            : r.hs300_close
-        }))
-        .filter(r => ok(r.close))
-    )
+  const [m,o,i]=await Promise.all(
+    [
+      'market.json',
+      'options_pcr.json',
+      'hs300.json'
+    ].map(fetchJSON)
   );
 
-  options = unique(
-    sorted(records(o))
-      .map(getOptionRow)
-      .filter(r => r && ok(r.etf))
+  meta={m,o,i};
+
+  market=uniq(rec(m));
+
+  idx=uniq(
+    rec(i)
+      .map(r=>({
+        date:r.date,
+        close:good(r.close)
+          ? r.close
+          : r.hs300_close
+      }))
+      .filter(r=>good(r.close))
   );
 
-  const last = markets.at(-1);
-  const oLast = options.at(-1);
-  const iLast = indices.at(-1);
-
-  txt(
-    "marketStatus",
-    m?.status === "real"
-      ? "真实盘后行情"
-      : "历史行情 / 未确认最新"
+  pcr=uniq(
+    rec(o)
+      .map(optionPoint)
+      .filter(r=>r&&good(r.overall))
   );
 
-  txt(
-    "marketDate",
-    last ? "A股 "+last.date : "A股数据不足"
-  );
-
-  txt(
-    "notice",
-    "A股："+(last?.date || "未接入")+
-    " ｜ 期权："+(oLast?.date || "未接入")+
-    " ｜ 沪深300："+(iLast?.date || "未接入")+
-    "。三套数据按各自实际日期标注，非实时行情。"
-  );
-
-  txt(
-    "b20",
-    ok(last?.breadth20 ?? last?.breadth)
-      ? num(last.breadth20 ?? last.breadth,1)+"%"
-      : "—"
-  );
-
-  txt(
-    "b60",
-    ok(last?.breadth60)
-      ? num(last.breadth60,1)+"%"
-      : "—"
-  );
-
-  txt(
-    "b20desc",
-    ok(last?.sma20?.coverage_pct)
-      ? "有效样本覆盖率 "+
-        num(last.sma20.coverage_pct,1)+"%"
-      : "等待有效历史"
-  );
-
-  txt(
-    "b60desc",
-    ok(last?.sma60?.coverage_pct)
-      ? "有效样本覆盖率 "+
-        num(last.sma60.coverage_pct,1)+"%"
-      : "等待有效历史"
-  );
-
-  txt("trin",num(last?.trin));
-  txt("hsClose",num(iLast?.close,2));
-  txt("hsDate",iLast?.date || "未接入");
-
-  txt("etfPcr",num(oLast?.etf));
-
-  txt(
-    "etfDate",
-    oLast?.date
-      ? "统计交易日 "+oLast.date
-      : "等待真实数据"
-  );
-
-  txt("pcr300",num(oLast?.p300));
-
-  txt(
-    "pcr300Date",
-    ok(oLast?.p300)
-      ? "上交所510300 + 深交所159919 · "+
-        oLast.date
-      : "缺少两只300ETF中的至少一只"
-  );
-
-  const lastStat = rollField("etf").at(-1);
-
-  txt("pcrMA",num(lastStat?.mean));
-  txt("pcrStd",num(lastStat?.std));
-
-  txt(
-    "pcrZ",
-    ok(lastStat?.std) && lastStat.std > 0
-      ? num(
-          (oLast.etf-lastStat.mean)/lastStat.std
-        )
-      : "—"
-  );
-
-  for (const ex of ["sh","sz","bj"]) {
-    txt(
-      ex+"N",
-      fmtCount(last?.exchange_stats?.[ex]?.active)
-    );
-
-    txt(
-      ex+"ST",
-      fmtCount(last?.exchange_stats?.[ex]?.st)
-    );
-  }
-
-  txt(
-    "mSource",
-    last?.date || "—"
-  );
-
-  txt(
-    "oSource",
-    o?.source
-      ? o.source+" ｜ "+(o?.asof || oLast?.date || "—")
-      : "尚未接入"
-  );
-
-  txt(
-    "iSource",
-    h?.source
-      ? h.source+" ｜ "+(h?.asof || iLast?.date || "—")
-      : "尚未接入"
-  );
-
-  seriesChartDefaults();
-  drawCompare();
-  renderAnalysis();
+  renderCards();
+  renderTrends();
+  renderCompare();
+  renderCorrelation();
+  analysis();
 }
 
 for (
-  const b of document.querySelectorAll(
-    "#periodButtons button[data-n]"
+  const btn of document.querySelectorAll(
+    '#rangeBtns button'
   )
 ) {
-  b.onclick = () => {
-    shownDays = Number(b.dataset.n);
+  btn.onclick=()=>{
+    rangeDays=+btn.dataset.days;
 
     document.querySelectorAll(
-      "#periodButtons button[data-n]"
-    ).forEach(el =>
-      el.classList.toggle("active",el===b)
+      '#rangeBtns button'
+    ).forEach(b=>
+      b.classList.toggle('active',b===btn)
     );
 
-    drawCompare();
+    renderCompare();
   };
 }
 
-$("bandsBtn").onclick = () => {
-  show2 = !show2;
+$('bandToggle').onclick=()=>{
+  show2=!show2;
 
-  txt(
-    "bandsBtn",
-    show2 ? "±2σ：显示" : "±2σ：隐藏"
+  put(
+    'bandToggle',
+    show2 ? '±2σ：显示' : '±2σ：隐藏'
   );
 
-  drawCompare();
+  renderCompare();
 };
 
 load();
