@@ -1,323 +1,819 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>全A股市场择时仪表盘</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#091525">
+<title>A股市场宽度仪表盘 · SMA20 / SMA60 / TRIN</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+
 <style>
 :root {
   color-scheme: dark;
-  --bg:#091322;
-  --card:#15243a;
-  --border:#30435d;
-  --text:#edf5ff;
-  --muted:#a6bad2;
-  --green:#48deb0;
-  --yellow:#ffd082;
-  --blue:#85baff;
+  --bg: #091321;
+  --panel: #14243a;
+  --panel2: #102034;
+  --line: #2b405c;
+  --txt: #eaf3ff;
+  --sub: #a2b6d2;
+  --green: #46dca8;
+  --blue: #7eb7ff;
+  --gold: #ffc56d;
+  --red: #fd8490;
 }
-* {box-sizing:border-box}
+
+* { box-sizing: border-box; }
+
 body {
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:Arial,"Microsoft Yahei",sans-serif;
-  line-height:1.6;
+  margin: 0;
+  background: var(--bg);
+  color: var(--txt);
+  font: 15px/1.55 system-ui, "Microsoft Yahei", sans-serif;
 }
-main {max-width:1200px;margin:auto;padding:28px 18px}
-h1 {font-size:28px;margin:0}
-h2 {font-size:18px;margin-top:0}
-.subtitle,.muted {color:var(--muted)}
-.subtitle {margin-top:4px}
-.grid {
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:16px;margin-top:20px;
+
+main {
+  max-width: 1260px;
+  margin: auto;
+  padding: 28px 22px 60px;
 }
-.card {
-  background:var(--card);border:1px solid var(--border);
-  border-radius:15px;padding:20px;min-width:0;
+
+header, .flex, .heading {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
-.metric {font-size:37px;font-weight:bold;margin:10px 0}
-.green {color:var(--green)}
-.yellow {color:var(--yellow)}
-.blue {color:var(--blue)}
-.wide {grid-column:span 2}
-.chart {height:290px}
-.notice {
-  padding:15px;border-radius:10px;margin-top:18px;
-  background:#23364d;border:1px solid var(--border);
+
+header { margin-bottom: 24px; }
+
+h1 { font-size: 29px; margin: 0; }
+h2 { font-size: 17px; margin: 0; }
+p { margin: 5px 0; }
+
+.sub, .small { color: var(--sub); }
+.small { font-size: 12px; }
+
+.statuschip {
+  padding: 7px 12px;
+  border: 1px solid #375470;
+  border-radius: 999px;
+  font-size: 12px;
+  background: #1b3048;
 }
+
+.statuschip.live {
+  border-color: #277961;
+  background: #183d36;
+  color: #76efbb;
+}
+
+.statuschip.bad {
+  color: #ffc1c1;
+  border-color: #76404b;
+  background: #382333;
+}
+
+.summary {
+  background: #1b324b;
+  border: 1px solid #395c7b;
+  border-radius: 12px;
+  padding: 14px 17px;
+  margin-bottom: 20px;
+}
+
+.summary.warn {
+  background: #362936;
+  border-color: #755360;
+  color: #ffdbdc;
+}
+
+.toolbar {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin: 10px 0 22px;
+}
+
 button {
-  padding:11px 18px;border-radius:8px;
-  background:#245479;color:white;border:0;
-  cursor:pointer;font-size:14px;margin-top:15px;
+  cursor: pointer;
+  border: 1px solid #3c6184;
+  background: #224261;
+  color: var(--txt);
+  font: inherit;
+  font-size: 13px;
+  border-radius: 9px;
+  padding: 9px 15px;
 }
-table {width:100%;border-collapse:collapse}
-td,th {
-  padding:10px 8px;border-bottom:1px solid var(--border);
-  text-align:left;
+
+button:hover { background: #2f5478; }
+
+.toolbar button.active {
+  background: #18565d;
+  border-color: var(--green);
 }
-th {color:var(--muted)}
-footer {margin-top:25px;color:var(--muted);font-size:13px}
-@media(max-width:900px) {
-  .grid {grid-template-columns:repeat(2,1fr)}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 15px;
 }
-@media(max-width:600px) {
-  .grid {grid-template-columns:1fr}
-  .wide {grid-column:span 1}
-  .metric {font-size:32px}
+
+.card {
+  background: #14243a;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 19px;
+  min-width: 0;
+}
+
+.metric {
+  font-size: 36px;
+  font-weight: 750;
+  margin: 9px 0 4px;
+  line-height: 1.2;
+}
+
+.green { color: var(--green); }
+.blue { color: var(--blue); }
+.gold { color: var(--gold); }
+
+.span2 { grid-column: span 2; }
+.full { grid-column: 1/-1; }
+
+.chart {
+  height: 325px;
+  margin-top: 18px;
+  position: relative;
+}
+
+.bar {
+  height: 7px;
+  margin: 13px 0 8px;
+  background: #23354e;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  width: 0;
+  background: var(--green);
+}
+
+.fill.blue { background: var(--blue); }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 12px;
+}
+
+th, td {
+  text-align: left;
+  border-bottom: 1px solid #293d57;
+  padding: 10px 7px;
+  font-size: 13px;
+}
+
+th { color: var(--sub); }
+
+.label {
+  font-size: 13px;
+  color: var(--sub);
+}
+
+.badge {
+  font-size: 11px;
+  padding: 3px 9px;
+  border: 1px solid #355477;
+  border-radius: 999px;
+}
+
+.detail {
+  color: var(--sub);
+  font-size: 12px;
+}
+
+.footer {
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid var(--line);
+  color: var(--sub);
+  font-size: 12px;
+}
+
+@media(max-width:950px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(max-width:620px) {
+  main { padding: 18px 13px; }
+  h1 { font-size: 23px; }
+  .grid { grid-template-columns: 1fr; }
+  .span2 { grid-column: span 1; }
+  .chart { height: 260px; }
+  .metric { font-size: 33px; }
 }
 </style>
 </head>
 
 <body>
 <main>
-<h1>全A股市场择时仪表盘</h1>
-<p class="subtitle">
-  上海证券交易所 + 深圳证券交易所 + 北京证券交易所
-  <br>包含 ST 和 *ST 股票 · 真实收盘行情
-</p>
 
-<div id="notice" class="notice">正在读取真实市场数据……</div>
-<button onclick="loadData()">刷新真实行情</button>
-
-<div class="grid">
-  <section class="card">
-    <div class="muted">全A股SMA20市场宽度</div>
-    <div class="metric green" id="breadth">—</div>
-    <div class="muted" id="breadthInfo">等待历史数据</div>
-  </section>
-
-  <section class="card">
-    <div class="muted">阿姆斯指数 TRIN（成交量）</div>
-    <div class="metric yellow" id="trin">—</div>
-    <div class="muted">标准公式，三个交易所统一单位</div>
-  </section>
-
-  <section class="card">
-    <div class="muted">TRIN（成交额对照版）</div>
-    <div class="metric blue" id="trinAmount">—</div>
-    <div class="muted">方便比较不同平台的口径</div>
-  </section>
-
-  <section class="card">
-    <div class="muted">TRIN五日均值</div>
-    <div class="metric" id="trin5">—</div>
-    <div class="muted">最近五个有效交易日</div>
-  </section>
-
-  <section class="card wide">
-    <h2>SMA20全市场宽度历史</h2>
-    <div class="chart"><canvas id="breadthChart"></canvas></div>
-  </section>
-
-  <section class="card wide">
-    <h2>TRIN历史走势</h2>
-    <div class="chart"><canvas id="trinChart"></canvas></div>
-  </section>
-
-  <section class="card wide">
-    <h2>三大交易所样本统计</h2>
-    <table>
-      <thead>
-        <tr><th>交易所</th><th>有效股票数</th><th>ST数量</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>上交所</td><td id="sh">—</td><td id="shst">—</td></tr>
-        <tr><td>深交所</td><td id="sz">—</td><td id="szst">—</td></tr>
-        <tr><td>北交所</td><td id="bj">—</td><td id="bjst">—</td></tr>
-      </tbody>
-    </table>
-    <p class="muted" id="stInfo">
-      ST股票包含在样本中；具体数量需有效名称数据。
+<header>
+  <div>
+    <h1>A股市场宽度 · 择时仪表盘</h1>
+    <p class="sub">
+      全A股 · 上交所 + 深交所 + 北交所
+      （含ST / *ST）· 真实日K收盘数据
     </p>
-  </section>
+  </div>
+  <div class="flex">
+    <span class="statuschip" id="statusChip">读取数据中</span>
+    <span class="statuschip" id="asofChip">交易日 —</span>
+  </div>
+</header>
 
-  <section class="card wide">
-    <h2>市场数据核验</h2>
-    <table>
-      <tr><td>行情交易日期</td><td id="date">—</td></tr>
-      <tr><td>数据来源</td><td id="source">—</td></tr>
-      <tr><td>上涨股票数</td><td id="up">—</td></tr>
-      <tr><td>下跌股票数</td><td id="down">—</td></tr>
-      <tr><td>上涨成交量</td><td id="upVol">—</td></tr>
-      <tr><td>下跌成交量</td><td id="downVol">—</td></tr>
-      <tr><td>有效行情股票总数</td><td id="total">—</td></tr>
-      <tr><td>SMA20样本覆盖率</td><td id="coverage">—</td></tr>
-    </table>
-  </section>
-
-  <section class="card wide">
-    <h2>市场状态分析</h2>
-    <div id="analysis">等待真实数据。</div>
-  </section>
+<div class="summary" id="notice">
+  正在读取历史行情及有效样本覆盖情况……
 </div>
 
-<footer>
-  数据只从 data/market.json 读取，未成功采集时不生成模拟行情。
-  TRIN使用上涨家数、下跌家数及对应的成交量计算。
-  所有股票范围及成交量单位仍应与独立行情终端交叉核验。
-  本网站为市场研究工具，不构成投资建议。
-</footer>
+<div class="toolbar">
+  <button id="refreshBtn">刷新行情文件</button>
+  <button id="allBtn" class="active">全部历史</button>
+  <button id="monthBtn">最近1个月</button>
+  <button id="jsonBtn">查看原始JSON</button>
+</div>
+
+<section class="grid">
+
+  <div class="card">
+    <div class="label">全A股 · 高于SMA20占比</div>
+    <div class="metric green" id="breadth20">—</div>
+    <div class="small" id="detail20">
+      等待20个完整交易日
+    </div>
+    <div class="bar">
+      <div class="fill" id="progress20"></div>
+    </div>
+    <div class="small" id="cover20">
+      有效样本覆盖率 —
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">全A股 · 高于SMA60占比</div>
+    <div class="metric blue" id="breadth60">—</div>
+    <div class="small" id="detail60">
+      等待60个完整交易日
+    </div>
+    <div class="bar">
+      <div class="fill blue" id="progress60"></div>
+    </div>
+    <div class="small" id="cover60">
+      有效样本覆盖率 —
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">
+      阿姆斯指数 · TRIN（成交量）
+    </div>
+    <div class="metric gold" id="trin">—</div>
+    <p class="small">
+      上涨家数 × 下跌成交量 ÷
+      (下跌家数 × 上涨成交量)
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="label">
+      TRIN成交额对照 / 五日均值
+    </div>
+    <div class="metric" id="trinAmount">—</div>
+    <p class="small">
+      成交量TRIN的5日均值：
+      <span id="trinMA5">—</span>
+    </p>
+  </div>
+
+  <div class="card span2">
+    <h2>SMA20 / SMA60 全市场宽度历史</h2>
+    <div class="chart">
+      <canvas id="breadthChart"></canvas>
+    </div>
+    <p class="small">
+      仅显示满足历史和样本覆盖要求的真实数值。
+    </p>
+  </div>
+
+  <div class="card span2">
+    <h2>TRIN成交量与成交额历史</h2>
+    <div class="chart">
+      <canvas id="trinChart"></canvas>
+    </div>
+  </div>
+
+  <div class="card span2">
+    <h2>市场宽度解释</h2>
+    <p id="analysis">
+      等待足够的SMA20和SMA60数据。
+    </p>
+    <p class="detail">
+      SMA20/SMA60宽度 = 高于对应日均线的股票数
+      ÷ 有效股票样本数 × 100%。
+    </p>
+  </div>
+
+  <div class="card span2">
+    <h2>真实数据核验</h2>
+    <table>
+      <tr><td>最近行情交易日</td><td id="date">—</td></tr>
+      <tr><td>数据源</td><td id="source">—</td></tr>
+      <tr><td>历史交易日数量</td><td id="sessions">—</td></tr>
+      <tr><td>上涨 / 下跌 / 平盘</td><td id="updown">—</td></tr>
+      <tr><td>上涨 / 下跌成交量</td><td id="volumes">—</td></tr>
+      <tr><td>有效交易股票数</td><td id="active">—</td></tr>
+      <tr><td>SMA20样本数</td><td id="eligible20">—</td></tr>
+      <tr><td>SMA60样本数</td><td id="eligible60">—</td></tr>
+    </table>
+  </div>
+
+  <div class="card full">
+    <h2>沪深京三交易所覆盖情况</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>交易所</th>
+          <th>有效股票数</th>
+          <th>ST / *ST数量</th>
+          <th>成交量倍数</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>上交所</td>
+          <td id="shN">—</td>
+          <td id="shSt">—</td>
+          <td id="shFactor">—</td>
+        </tr>
+        <tr>
+          <td>深交所</td>
+          <td id="szN">—</td>
+          <td id="szSt">—</td>
+          <td id="szFactor">—</td>
+        </tr>
+        <tr>
+          <td>北交所</td>
+          <td id="bjN">—</td>
+          <td id="bjSt">—</td>
+          <td id="bjFactor">—</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="small" id="stNote">
+      ST股票纳入计算，名称数据不足时不虚构ST数量。
+    </p>
+  </div>
+
+</section>
+
+<div class="footer">
+  使用第三方真实日K线数据计算。
+  非交易所官方认证市场宽度指数。
+  SMA20和SMA60使用未复权收盘价；
+  除权、除息可能影响计算。
+  本工具仅供研究，不构成投资建议。
+</div>
+
 </main>
 
 <script>
-const $ = id => document.getElementById(id);
-let bChart, tChart;
+"use strict";
 
-function num(v,d=2) {
+const get = id => document.getElementById(id);
+
+function put(id, value) {
+  get(id).textContent = value;
+}
+
+function number(v, digits = 2) {
   return typeof v === "number" && Number.isFinite(v)
-    ? v.toFixed(d) : "—";
-}
-function set(id,v) {$(id).textContent=v}
-
-function analyse(b,t) {
-  if (!Number.isFinite(b) || !Number.isFinite(t))
-    return "SMA20宽度或TRIN数据不足，暂不判断市场状态。";
-  if (b<25 && t>1.5)
-    return "市场宽度极低且卖压强，关注恐慌是否衰竭。";
-  if (b<40 && t>1.2)
-    return "市场内部结构偏弱，防范进一步下跌。";
-  if (b>60 && t<1)
-    return "市场参与度较高，量能结构相对偏强。";
-  return "当前处于震荡或分化状态，需要继续观察趋势。";
+    ? v.toFixed(digits)
+    : "—";
 }
 
-function chart(canvas,labels,datasets,range) {
-  if (typeof Chart === "undefined") return null;
-  return new Chart($(canvas),{
-    type:"line",
-    data:{
-      labels,
-      datasets:datasets.map(d=>({
-        label:d.label,
-        data:d.data,
-        borderColor:d.color,
-        borderWidth:2,
-        pointRadius:0,
-        spanGaps:false,
-        tension:.15
-      }))
+function integer(v) {
+  return typeof v === "number"
+    ? v.toLocaleString("zh-CN")
+    : "—";
+}
+
+let broadChart = null;
+let trinChart = null;
+let rows = [];
+let filterDays = 0;
+
+function destroyCharts() {
+  if (broadChart) {
+    broadChart.destroy();
+    broadChart = null;
+  }
+  if (trinChart) {
+    trinChart.destroy();
+    trinChart = null;
+  }
+}
+
+function line(label, data, color) {
+  return {
+    label,
+    data,
+    borderColor: color,
+    backgroundColor: color,
+    spanGaps: false,
+    tension: 0.15,
+    pointRadius: 0,
+    borderWidth: 2
+  };
+}
+
+function draw() {
+  destroyCharts();
+
+  const history = filterDays
+    ? rows.slice(-filterDays)
+    : rows;
+
+  if (typeof Chart === "undefined") {
+    return;
+  }
+
+  const labels = history.map(r => r.date);
+
+  const common = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: { color: "#bdcde3" }
+      }
     },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      scales:{
-        x:{ticks:{color:"#a6bad2",maxTicksLimit:6}},
-        y:{
-          min:range?range[0]:undefined,
-          max:range?range[1]:undefined,
-          ticks:{color:"#a6bad2"}
+    scales: {
+      x: {
+        ticks: {
+          color: "#92a8c2",
+          maxTicksLimit: 7
         }
       },
-      plugins:{legend:{labels:{color:"#edf5ff"}}}
+      y: {
+        ticks: { color: "#92a8c2" }
+      }
     }
+  };
+
+  broadChart = new Chart(get("breadthChart"), {
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        line(
+          "SMA20宽度 (%)",
+          history.map(r => r.breadth20 ?? null),
+          "#46dca8"
+        ),
+        line(
+          "SMA60宽度 (%)",
+          history.map(r => r.breadth60 ?? null),
+          "#7eb7ff"
+        )
+      ]
+    },
+    options: {
+      ...common,
+      scales: {
+        ...common.scales,
+        y: {
+          min: 0,
+          max: 100,
+          ticks: { color: "#92a8c2" }
+        }
+      }
+    }
+  });
+
+  const ma5 = rows.map((r, i) => {
+    const last5 = rows.slice(
+      Math.max(0, i - 4),
+      i + 1
+    );
+
+    if (
+      last5.length !== 5 ||
+      !last5.every(x => typeof x.trin === "number")
+    ) {
+      return null;
+    }
+
+    return (
+      last5.reduce((s, x) => s + x.trin, 0) / 5
+    );
+  });
+
+  const start = filterDays
+    ? rows.length - history.length
+    : 0;
+
+  trinChart = new Chart(get("trinChart"), {
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        line(
+          "成交量TRIN",
+          history.map(r => r.trin ?? null),
+          "#ffc56d"
+        ),
+        line(
+          "TRIN 5日均值",
+          ma5.slice(start),
+          "#7eb7ff"
+        ),
+        line(
+          "成交额TRIN",
+          history.map(r => r.trin_amount ?? null),
+          "#bba0fc"
+        )
+      ]
+    },
+    options: common
   });
 }
 
-async function loadData() {
-  set("notice","正在读取真实行情……");
+function marketState(b20, b60, trin) {
+  if (
+    [b20, b60, trin].some(
+      x => typeof x !== "number"
+    )
+  ) {
+    return "数据不足，暂不生成综合市场信号。";
+  }
+
+  if (b20 > 60 && b60 > 60 && trin < 1) {
+    return "中短期趋势偏强，市场参与度较高。";
+  }
+
+  if (b20 < 40 && b60 < 40 && trin > 1.2) {
+    return "市场内部结构偏弱，需要关注下跌风险。";
+  }
+
+  if (b20 > b60 + 15) {
+    return "短期市场宽度强于中期，参与度可能正在改善。";
+  }
+
+  if (b20 + 15 < b60) {
+    return "短期市场宽度弱于中期，近期可能存在回落。";
+  }
+
+  return "市场宽度与TRIN尚未形成明显共振。";
+}
+
+function windowCard(period, value, info) {
+  put(
+    "breadth" + period,
+    typeof value === "number"
+      ? number(value, 1) + "%"
+      : "数据不足"
+  );
+
+  const present = info?.sessions || 0;
+
+  get("progress" + period).style.width =
+    Math.min(100, present / period * 100) + "%";
+
+  put(
+    "detail" + period,
+    typeof value === "number"
+      ? "连续" + period + "个交易日已满足"
+      : "已获取 " + present + "/" + period + " 个交易日"
+  );
+
+  put(
+    "cover" + period,
+    typeof value === "number"
+      ? "有效股票覆盖率 " +
+        number(info.coverage_pct, 1) + "%"
+      : "缺失日期：" +
+        (info?.missing_dates || []).slice(-3).join("、")
+  );
+}
+
+function clearData() {
+  const fields = [
+    "breadth20", "breadth60",
+    "trin", "trinAmount", "trinMA5",
+    "date", "source", "sessions",
+    "updown", "volumes", "active",
+    "eligible20", "eligible60",
+    "shN", "szN", "bjN",
+    "shSt", "szSt", "bjSt",
+    "shFactor", "szFactor", "bjFactor"
+  ];
+
+  fields.forEach(id => put(id, "—"));
+  put("analysis", "暂无足够真实市场数据。");
+  destroyCharts();
+}
+
+async function load() {
+  put("notice", "正在读取真实A股数据……");
+
   try {
-    const response=await fetch(
-      "./data/market.json?t="+Date.now(),
-      {cache:"no-store"}
+    const res = await fetch(
+      "./data/market.json?v=" + Date.now(),
+      { cache: "no-store" }
     );
-    if (!response.ok) throw Error("数据文件无法读取");
 
-    const data=await response.json();
-    if (
-      data.status!=="real" ||
-      data.schema_version!==3 ||
-      !Array.isArray(data.history) ||
-      !data.history.length
-    ) throw Error("新版真实行情尚未采集成功");
-
-    const h=data.history
-      .filter(r=>r.date && Number.isFinite(r.trin))
-      .sort((a,b)=>a.date.localeCompare(b.date));
-
-    if (!h.length) throw Error("没有有效TRIN历史记录");
-
-    const last=h[h.length-1];
-    const b=last.breadth;
-    const t=last.trin;
-
-    set("date",last.date);
-    set("source",last.data_provider || data.source || "—");
-    set("breadth",num(b,1)+(Number.isFinite(b)?"%":""));
-    set("trin",num(t));
-    set("trinAmount",num(last.trin_amount));
-
-    const recent=h.slice(-5);
-    const t5=recent.length===5
-      ? recent.reduce((s,r)=>s+r.trin,0)/5
-      : null;
-    set("trin5",num(t5));
-
-    set("up",last.advancers ?? "—");
-    set("down",last.decliners ?? "—");
-    set("upVol",num(last.up_volume,0));
-    set("downVol",num(last.down_volume,0));
-    set("total",last.active_count ?? "—");
-    set("coverage",num(last.coverage_pct,1)+"%");
-
-    set("breadthInfo",Number.isFinite(b)
-      ? "有效均线样本："+last.valid_count
-      : "历史积累："+(last.warmup_sessions??0)+"/20个交易日");
-
-    const ex=last.exchange_stats || {};
-    for (const m of ["sh","sz","bj"]) {
-      set(m,ex[m]?.active ?? "—");
-      set(m+"st",ex[m]?.st ?? "—");
+    if (!res.ok) {
+      throw new Error("market.json 无法读取");
     }
-    set("stInfo",last.st_audit_available
-      ? "ST/*ST名称统计已启用；未按名称排除股票。"
-      : "尚无有效股票名称清单，ST数量未知，但未主动排除ST。");
 
-    set("analysis",analyse(b,t));
+    const payload = await res.json();
 
-    if(bChart) bChart.destroy();
-    if(tChart) tChart.destroy();
+    if (
+      payload.schema_version !== 4 ||
+      !Array.isArray(payload.history)
+    ) {
+      throw new Error(
+        "尚未运行SMA20/SMA60新版采集程序"
+      );
+    }
 
-    const labels=h.map(r=>r.date);
-    bChart=chart("breadthChart",labels,[{
-      label:"SMA20宽度",
-      data:h.map(r=>r.breadth??null),
-      color:"#48deb0"
-    }],[0,100]);
+    rows = payload.history
+      .slice()
+      .sort((a, b) => a.date.localeCompare(b.date));
 
-    tChart=chart("trinChart",labels,[
-      {
-        label:"成交量TRIN",
-        data:h.map(r=>r.trin),
-        color:"#ffd082"
-      },
-      {
-        label:"成交额TRIN",
-        data:h.map(r=>r.trin_amount??null),
-        color:"#85baff"
-      }
-    ],null);
+    if (!rows.length) {
+      throw new Error("历史数据尚未采集成功");
+    }
 
-    set("notice","已加载真实行情："+last.date+
-      "。数据来源："+(last.data_provider||"第三方市场数据")+
-      "。请核验交易日期和样本覆盖率。");
+    const last = rows[rows.length - 1];
+    const stale = (
+      payload.status !== "real" ||
+      last.date !== payload.expected_session
+    );
 
-  } catch(e) {
-    set("notice","暂无新版真实行情："+e.message);
-    for(const id of [
-      "breadth","trin","trinAmount","trin5",
-      "date","source","up","down","upVol","downVol",
-      "total","coverage","sh","sz","bj",
-      "shst","szst","bjst"
-    ]) set(id,"—");
-    set("breadthInfo","等待真实历史数据");
-    set("analysis","数据不足，不提供市场判断。");
-    if(bChart){bChart.destroy();bChart=null}
-    if(tChart){tChart.destroy();tChart=null}
+    put("date", last.date);
+    put(
+      "source",
+      last.data_provider || payload.source || "—"
+    );
+
+    put(
+      "sessions",
+      integer(payload.session_count) +
+      " / " +
+      integer(payload.target_sessions)
+    );
+
+    put("active", integer(last.active_count));
+
+    put(
+      "statusChip",
+      stale ? "历史数据非最新" : "真实盘后数据"
+    );
+
+    get("statusChip").className =
+      "statuschip " + (stale ? "bad" : "live");
+
+    put("asofChip", "交易日 " + last.date);
+
+    put(
+      "notice",
+      "已加载真实行情：" + last.date +
+      "；SMA20：" +
+      (last.breadth20 == null ? "等待补齐" : "已计算") +
+      "；SMA60：" +
+      (last.breadth60 == null ? "等待补齐" : "已计算") +
+      (stale ? "。注意：行情并非最新交易日。" : "")
+    );
+
+    windowCard(20, last.breadth20, last.sma20);
+    windowCard(60, last.breadth60, last.sma60);
+
+    put("eligible20", integer(last.sma20?.eligible));
+    put("eligible60", integer(last.sma60?.eligible));
+
+    put("trin", number(last.trin));
+    put("trinAmount", number(last.trin_amount));
+
+    const last5 = rows
+      .filter(x => typeof x.trin === "number")
+      .slice(-5);
+
+    put(
+      "trinMA5",
+      last5.length === 5
+        ? number(
+            last5.reduce((s, x) => s + x.trin, 0) / 5
+          )
+        : "数据不足"
+    );
+
+    put(
+      "updown",
+      [
+        last.advancers,
+        last.decliners,
+        last.unchanged
+      ].map(integer).join(" / ")
+    );
+
+    put(
+      "volumes",
+      [
+        last.up_volume,
+        last.down_volume
+      ].map(x => number(x, 0)).join(" / ")
+    );
+
+    const exchange = last.exchange_stats || {};
+
+    for (const m of ["sh", "sz", "bj"]) {
+      put(
+        m + "N",
+        integer(exchange[m]?.active)
+      );
+
+      put(
+        m + "St",
+        exchange[m]?.st == null
+          ? "未知"
+          : integer(exchange[m].st)
+      );
+
+      put(
+        m + "Factor",
+        exchange[m]?.volume_factor == null
+          ? "—"
+          : "×" + exchange[m].volume_factor
+      );
+    }
+
+    put(
+      "stNote",
+      last.st_audit_available
+        ? "ST和*ST已纳入统计，名称数量可审计。"
+        : "ST和*ST纳入股票范围，但名称数量尚未核实。"
+    );
+
+    put(
+      "analysis",
+      marketState(
+        last.breadth20,
+        last.breadth60,
+        last.trin
+      )
+    );
+
+    draw();
+
+  } catch (error) {
+    clearData();
+
+    put("statusChip", "无有效数据");
+    get("statusChip").className = "statuschip bad";
+
+    put(
+      "notice",
+      "真实数据暂不可用：" + error.message
+    );
   }
 }
-loadData();
+
+get("refreshBtn").onclick = load;
+
+get("allBtn").onclick = () => {
+  filterDays = 0;
+  get("allBtn").classList.add("active");
+  get("monthBtn").classList.remove("active");
+  draw();
+};
+
+get("monthBtn").onclick = () => {
+  filterDays = 22;
+  get("monthBtn").classList.add("active");
+  get("allBtn").classList.remove("active");
+  draw();
+};
+
+get("jsonBtn").onclick = () => {
+  location.href = "./data/market.json";
+};
+
+load();
 </script>
 </body>
 </html>
