@@ -1,10 +1,9 @@
-
 name: Update all A-share breadth and TRIN
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 10 * * 1-5'
+    - cron: '30 10 * * 1-5' # 18:30 China Standard Time on weekdays
 
 permissions:
   contents: write
@@ -22,7 +21,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -36,7 +34,13 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Update A-share market indicators
+        id: collect
+        continue-on-error: true
         run: python update_data.py
+
+      - name: Warn if collection failed
+        if: steps.collect.outcome == 'failure'
+        run: echo '::warning::Data collector failed; publishing previous market.json only. Check the collector log. No new live data was created.'
 
       - name: Save market data
         run: |
