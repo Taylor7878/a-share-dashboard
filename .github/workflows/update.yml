@@ -1,8 +1,9 @@
 
-name: Update all A-share breadth and TRIN
+name: Update A-share SMA20 SMA60 TRIN CSI300 PCR
 
 on:
   workflow_dispatch:
+
   schedule:
     - cron: '30 10 * * 1-5'
 
@@ -12,13 +13,13 @@ permissions:
   id-token: write
 
 concurrency:
-  group: dashboard-pages
+  group: ashare-market-data-update
   cancel-in-progress: false
 
 jobs:
   update-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 45
 
     environment:
       name: github-pages
@@ -33,37 +34,65 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install "akshare>=1.16"
 
-      - name: Update SMA20 SMA60 and TRIN
+      - name: Update real A-share SMA20 SMA60 and TRIN
         run: python update_data.py
 
-      - name: Collect real CSI300 history
+      - name: Collect real CSI300 index history
         continue-on-error: true
         run: python collect_hs300.py
 
-      - name: Save market and index data
+      - name: Collect SSE and SZSE ETF option PCR
+        continue-on-error: true
+        run: python collect_options_pcr.py
+
+      - name: Check generated data files
+        run: |
+          echo "Checking published data:"
+          ls -lh data/
+          test -s data/market.json
+
+          if [ -s data/hs300.json ]; then
+            echo "HS300_FILE_READY"
+          else
+            echo "::warning::HS300 data unavailable"
+          fi
+
+          if [ -s data/options_pcr.json ]; then
+            echo "ETF_PCR_FILE_READY"
+          else
+            echo "::warning::ETF PCR data unavailable"
+          fi
+
+      - name: Save market data to GitHub
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add -A data/
+
           if ! git diff --cached --quiet; then
-            git commit -m "Update A-share and CSI300 market data"
+            git commit -m "Update A-share and options data"
             git push
           fi
 
-      - name: Prepare website files
+      - name: Prepare static website
         run: |
           mkdir -p site/data
+
           cp index.html site/index.html
           cp data/market.json site/data/market.json
 
-          if [ -f data/hs300.json ]; then
+          if [ -s data/hs300.json ]; then
             cp data/hs300.json site/data/hs300.json
           fi
 
-          if [ -f data/options_pcr.json ]; then
+          if [ -s data/options_pcr.json ]; then
             cp data/options_pcr.json site/data/options_pcr.json
           fi
 
