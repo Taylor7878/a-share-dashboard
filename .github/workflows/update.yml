@@ -12,16 +12,17 @@ permissions:
   id-token: write
 
 concurrency:
-  group: ashare-dashboard
+  group: ashare-verified-collector-v4
   cancel-in-progress: false
 
 jobs:
   update-and-deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 40
+
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url }}
 
     steps:
       - name: Checkout repository
@@ -32,21 +33,27 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: pip install -r requirements.txt
 
-      - name: Retrieve only real A-share market data
+      - name: Backfill 80 sessions and calculate SMA20 SMA60 TRIN
         run: python update_data.py
 
-      - name: Save verified data
+      - name: Commit verified market data and backfill cache
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A data/
           if ! git diff --cached --quiet; then
-            git commit -m "Update real A-share data"
+            git commit -m "Update real A-share breadth SMA20 SMA60"
             git push
           fi
+
+      - name: Prepare static website
+        run: |
+          mkdir -p site/data
+          cp index.html site/index.html
+          cp data/market.json site/data/market.json
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
@@ -54,8 +61,8 @@ jobs:
       - name: Upload website
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: site
 
       - name: Deploy website
-        id: deployment
+        id: deploy
         uses: actions/deploy-pages@v4
